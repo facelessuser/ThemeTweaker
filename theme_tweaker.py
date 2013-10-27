@@ -28,18 +28,26 @@ def packages_path(pth):
     return join(dirname(sublime.packages_path()), normpath(pth))
 
 
+def get_setting(setting, override, default):
+    value = override
+    if value is None:
+        value = sublime.load_settings(PLUGIN_SETTINGS).get(setting, default)
+    return value
+
+
 class ToggleThemeTweakerModeCommand(sublime_plugin.ApplicationCommand):
     def run(self):
         global TWEAK_MODE
         TWEAK_MODE = not TWEAK_MODE
+        sublime.status_message("TweakMode is %s" % ("enabled" if TWEAK_MODE else "disabled"))
         if not TWEAK_MODE:
             ThemeTweaker().clear_history()
 
 
 class ThemeTweakerBrightnessCommand(sublime_plugin.ApplicationCommand):
-    def run(self, direction="+", context=None):
+    def run(self, direction="+", step=None, context=None):
         magnitude = -1.0 if direction == "-" else 1.0
-        value = float(sublime.load_settings(PLUGIN_SETTINGS).get("brightness_step", .01)) * magnitude
+        value = float(get_setting("brightness_step", step, .01)) * magnitude
         if value > -1.0 and value < 1.0:
             if context is not None and context in ["fg", "bg"]:
                 ThemeTweaker().run("brightness(%f)@%s" % (value + 1.0, context))
@@ -48,9 +56,9 @@ class ThemeTweakerBrightnessCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerSaturationCommand(sublime_plugin.ApplicationCommand):
-    def run(self, direction="+", context=None):
+    def run(self, direction="+", step=None, context=None):
         magnitude = -1.0 if direction == "-" else 1.0
-        value = float(sublime.load_settings(PLUGIN_SETTINGS).get("saturation_step", .1)) * magnitude
+        value = float(get_setting("saturation_step", step, .1)) * magnitude
         if value > -1.0 and value < 1.0:
             if context is not None and context in ["fg", "bg"]:
                 ThemeTweaker().run("saturation(%f)@%s" % (value + 1.0, context))
@@ -59,9 +67,9 @@ class ThemeTweakerSaturationCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerHueCommand(sublime_plugin.ApplicationCommand):
-    def run(self, direction="+", context=None):
+    def run(self, direction="+", step=None, context=None):
         magnitude = -1 if direction == "-" else 1
-        value = int(sublime.load_settings(PLUGIN_SETTINGS).get("hue_step", 10)) * magnitude
+        value = int(get_setting("hue_step", step, 10)) * magnitude
         if value >= -360 and value <= 360:
             if context is not None and context in ["fg", "bg"]:
                 ThemeTweaker().run("hue(%d)@%s" % (value, context))
@@ -85,8 +93,8 @@ class ThemeTweakerSepiaCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
-    def run(self, context=None):
-        value = int(sublime.load_settings(PLUGIN_SETTINGS).get("colorize_hue", 0))
+    def run(self, hue=None, context=None):
+        value = int(get_setting("colorize_hue", hue, 0))
         if context is not None and context in ["fg", "bg"]:
             ThemeTweaker().run("colorize(%d)@%s" % (value, context))
         else:
@@ -94,8 +102,8 @@ class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerGlowCommand(sublime_plugin.ApplicationCommand):
-    def run(self):
-        value = float(sublime.load_settings(PLUGIN_SETTINGS).get("glow_intensity", .2))
+    def run(self, intensity):
+        value = float(get_setting("glow_intensity", intensity, .2))
         ThemeTweaker().run("glow(%f)" % value)
 
 

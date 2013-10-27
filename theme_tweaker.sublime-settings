@@ -1,16 +1,30 @@
 {
-    // Brightness steps (+/- from 1.0)
+    //////////////////////
+    // Defaults
+    //////////////////////
+
+    // Default brightness steps (+/- from 1.0)
+    // Can be overridden in the
+    // ThemeTweakerBrightnessCommand command's argument "step"
     "brightness_step": 0.01,
 
-    // Colorize default hue (0=Redish)
+    // Default colorize default hue (0=Redish)
+    // Can be overridden in the
+    // ThemeTweakerColorizeCommand command's argument "hue"
     "colorize_hue": 0,
 
-    // Glow intensity (range: 0.0 - 1.0)
+    // Default glow intensity (range: 0.0 - 1.0)
+    // Can be overridden in the
+    // ThemeTweakerGlowCommand command's argument "intensity"
     "glow_intensity": 0.1,
 
     // Hue step in degrees (range 0-360)
+    // Can be overridden in the
+    // ThemeTweakerHueCommand command's argument "step"
     "hue_step": 10,
 
     // Staturation steps (+/- from 1.0)
+    // Can be overridden in the
+    // ThemeTweakerSaturationCommand command's argument "step"
     "saturation_step": 0.1
 }
