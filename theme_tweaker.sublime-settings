@@ -1,0 +1,16 @@
+{
+    // Brightness steps (+/- from 1.0)
+    "brightness_step": 0.01,
+
+    // Colorize default hue (0=Redish)
+    "colorize_hue": 0,
+
+    // Glow intensity (range: 0.0 - 1.0)
+    "glow_intensity": 0.1,
+
+    // Hue step in degrees (range 0-360)
+    "hue_step": 10,
+
+    // Staturation steps (+/- from 1.0)
+    "saturation_step": 0.1
+}
