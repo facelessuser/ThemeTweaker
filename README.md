@@ -114,7 +114,7 @@ example:
         {"key": "theme_tweaker"}
     ],
     "args": {
-        "filters": "grayscale;sepia;colorize(0);hue(-30);brightness(1.050000);saturation(0.900000);brightness(0.950000)"
+        "filters": "grayscale@fg;sepia;colorize(0);hue(-30);brightness(1.050000)@bg;saturation(0.900000);brightness(0.950000)"
     }
 },
 ```
@@ -128,3 +128,5 @@ The available filters are:
 - hue(signed integer)
 - colorize(integer)
 - glow(positive float)
+
+To apply a filter to just the foreground or background, simply add `@fg` or `@bg` to the filter in question.
