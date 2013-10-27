@@ -1,0 +1,9 @@
+[
+    //////////////////////////////////
+    // Theme Tweaker Commands
+    //////////////////////////////////
+    {
+        "caption": "Theme Tweaker: Toggle Tweak Mode",
+        "command": "toggle_theme_tweaker_mode"
+    }
+]
