@@ -22,6 +22,16 @@ TEMP_PATH = "Packages/User/%s" % TEMP_FOLDER
 TWEAKED = TEMP_PATH + "/tweaked.tmTheme"
 SCHEME = "color_scheme"
 TWEAK_MODE = False
+THEME_TWEAKER_READY = False
+
+
+def log(s):
+    print("ThemeTweaker: %s" % s)
+
+
+def debug_log(s):
+    if SETTINGS.get("debug", False):
+        log(s)
 
 
 def packages_path(pth):
@@ -45,79 +55,79 @@ class ToggleThemeTweakerModeCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerBrightnessCommand(sublime_plugin.ApplicationCommand):
-    def run(self, direction="+", step=None, context=None):
+    def run(self, direction="+", step=None, context=None, theme=None):
         magnitude = -1.0 if direction == "-" else 1.0
         value = float(get_setting("brightness_step", step, .01)) * magnitude
         if value > -1.0 and value < 1.0:
             if context is not None and context in ["fg", "bg"]:
-                ThemeTweaker().run("brightness(%f)@%s" % (value + 1.0, context))
+                ThemeTweaker(theme).run("brightness(%f)@%s" % (value + 1.0, context))
             else:
-                ThemeTweaker().run("brightness(%f)" % (value + 1.0))
+                ThemeTweaker(theme).run("brightness(%f)" % (value + 1.0))
 
 
 class ThemeTweakerSaturationCommand(sublime_plugin.ApplicationCommand):
-    def run(self, direction="+", step=None, context=None):
+    def run(self, direction="+", step=None, context=None, theme=None):
         magnitude = -1.0 if direction == "-" else 1.0
         value = float(get_setting("saturation_step", step, .1)) * magnitude
         if value > -1.0 and value < 1.0:
             if context is not None and context in ["fg", "bg"]:
-                ThemeTweaker().run("saturation(%f)@%s" % (value + 1.0, context))
+                ThemeTweaker(theme).run("saturation(%f)@%s" % (value + 1.0, context))
             else:
-                ThemeTweaker().run("saturation(%f)" % (value + 1.0))
+                ThemeTweaker(theme).run("saturation(%f)" % (value + 1.0))
 
 
 class ThemeTweakerHueCommand(sublime_plugin.ApplicationCommand):
-    def run(self, direction="+", step=None, context=None):
+    def run(self, direction="+", step=None, context=None, theme=None):
         magnitude = -1 if direction == "-" else 1
         value = int(get_setting("hue_step", step, 10)) * magnitude
         if value >= -360 and value <= 360:
             if context is not None and context in ["fg", "bg"]:
-                ThemeTweaker().run("hue(%d)@%s" % (value, context))
+                ThemeTweaker(theme).run("hue(%d)@%s" % (value, context))
             else:
-                ThemeTweaker().run("hue(%d)" % value)
+                ThemeTweaker(theme).run("hue(%d)" % value)
 
 
 class ThemeTweakerInvertCommand(sublime_plugin.ApplicationCommand):
-    def run(self, context=None):
+    def run(self, context=None, theme=None):
         if context is not None and context in ["fg", "bg"]:
-            ThemeTweaker().run("invert@%s" % context)
+            ThemeTweaker(theme).run("invert@%s" % context)
         else:
-            ThemeTweaker().run("invert")
+            ThemeTweaker(theme).run("invert")
 
 class ThemeTweakerSepiaCommand(sublime_plugin.ApplicationCommand):
-    def run(self, context=None):
+    def run(self, context=None, theme=None):
         if context is not None and context in ["fg", "bg"]:
-            ThemeTweaker().run("sepia@%s" % context)
+            ThemeTweaker(theme).run("sepia@%s" % context)
         else:
-            ThemeTweaker().run("sepia")
+            ThemeTweaker(theme).run("sepia")
 
 
 class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
-    def run(self, hue=None, context=None):
+    def run(self, hue=None, context=None, theme=None):
         value = int(get_setting("colorize_hue", hue, 0))
         if context is not None and context in ["fg", "bg"]:
-            ThemeTweaker().run("colorize(%d)@%s" % (value, context))
+            ThemeTweaker(theme).run("colorize(%d)@%s" % (value, context))
         else:
-            ThemeTweaker().run("colorize(%d)" % value)
+            ThemeTweaker(theme).run("colorize(%d)" % value)
 
 
 class ThemeTweakerGlowCommand(sublime_plugin.ApplicationCommand):
-    def run(self, intensity):
+    def run(self, intensity, theme=None):
         value = float(get_setting("glow_intensity", intensity, .2))
-        ThemeTweaker().run("glow(%f)" % value)
+        ThemeTweaker(theme).run("glow(%f)" % value)
 
 
 class ThemeTweakerGrayscaleCommand(sublime_plugin.ApplicationCommand):
-    def run(self, context=None):
+    def run(self, context=None, theme=None):
         if context is not None and context in ["fg", "bg"]:
-            ThemeTweaker().run("grayscale@%s" % context)
+            ThemeTweaker(theme).run("grayscale@%s" % context)
         else:
-            ThemeTweaker().run("grayscale")
+            ThemeTweaker(theme).run("grayscale")
 
 
 class ThemeTweakerCustomCommand(sublime_plugin.ApplicationCommand):
-    def run(self, filters):
-        ThemeTweaker().run(filters)
+    def run(self, filters, theme=None):
+        ThemeTweaker(theme).run(filters)
 
 
 class ThemeTweakerClearCommand(sublime_plugin.ApplicationCommand):
@@ -136,7 +146,7 @@ class ThemeTweakerRedoCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweaker(object):
-    def __init__(self, set_safe=False, init_theme=None):
+    def __init__(self, init_theme=None, set_safe=False):
         self.set_safe = set_safe
         self.init_theme = init_theme
 
@@ -193,8 +203,14 @@ class ThemeTweaker(object):
             found = True
         else:
             try:
-                sublime.load_settings(pth)
-                found = True
+                results = sublime.find_resources(basename(pth))
+                if sublime.platform() == "windows":
+                    for r in results:
+                        if r.lower() == pth.lower():
+                            found = True
+                            break
+                else:
+                    found = pth in results
             except:
                 pass
         return found
@@ -202,8 +218,20 @@ class ThemeTweaker(object):
     def _theme_valid(self, scheme_file):
         is_working = scheme_file.startswith(TEMP_PATH + '/')
         if is_working and self.scheme_map is not None and self.scheme_map["working"] == scheme_file and self._exists(self.scheme_map["original"]):
-            self.scheme_file = packages_path(self.scheme_map["original"])
-            self.scheme_clone = packages_path(self.scheme_map["working"])
+            if self._exists(self.scheme_map["working"]):
+                self.scheme_file = packages_path(self.scheme_map["original"])
+                self.scheme_clone = packages_path(self.scheme_map["working"])
+            else:
+                # Recover form missing temp
+                log("Revert to original because temp is missing")
+                if self.set_safe:
+                    self._set_theme_safely(self.scheme_map["original"])
+                else:
+                    self.settings.set(SCHEME, self.scheme_map["original"])
+                self.scheme_map["redo"] = ""
+                self.scheme_map["undo"] = ""
+                self.p_settings["scheme_map"] = self.scheme_map
+                self._save_tweak_settings()
             return True
         elif not is_working:
             self._ensure_temp()
@@ -222,7 +250,7 @@ class ThemeTweaker(object):
                 self._save_tweak_settings()
                 return True
             except Exception as e:
-                print(e)
+                log(e)
                 sublime.error_message("Cannot clone theme")
                 return
         return False
@@ -300,13 +328,6 @@ class ThemeTweaker(object):
     def refresh(self):
         self._setup()
 
-        if self.theme_valid:
-            plist = sublime.load_binary_resource(self.scheme_map["original"])
-            self.plist_file = ColorSchemeTweaker().tweak(
-                readPlistFromBytes(plist),
-                self.scheme_map["undo"]
-            )
-
     def run(self, filters):
         self._setup()
 
@@ -327,12 +348,28 @@ class ThemeTweaker(object):
                 self._save_tweak_settings()
 
 
+class ThemeTweakerIsReadyCommand(sublime_plugin.ApplicationCommand):
+    @classmethod
+    def is_tweakable(cls):
+        return THEME_TWEAKER_READY
+
+    def run(self):
+        tweakable = ThemeTweakerIsReadyCommand.is_tweakable()
+        if tweakable:
+            log("Ready to tweak!")
+
+
 class ThemeTweakerListener(sublime_plugin.EventListener):
     def on_query_context(self, view, key, operator, operand, match_all):
         return key == "theme_tweaker" and TWEAK_MODE
 
 
 def plugin_loaded():
+    global THEME_TWEAKER_READY
+    THEME_TWEAKER_READY = False
+
     # Just in case something went wrong,
     # and a theme got removed or isn't there on startup
-    ThemeTweaker(set_safe=True).refresh()
+    ThemeTweaker().refresh()
+    THEME_TWEAKER_READY = True
+    sublime.run_command("theme_tweaker_is_ready")
