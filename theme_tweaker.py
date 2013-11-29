@@ -25,8 +25,11 @@ TWEAK_MODE = False
 THEME_TWEAKER_READY = False
 
 
-def log(s):
-    print("ThemeTweaker: %s" % s)
+def log(msg, status=False):
+    string = str(msg)
+    print("ThemeTweaker: %s" % string)
+    if status:
+        sublime.status_message(string)
 
 
 def debug_log(s):
@@ -215,14 +218,14 @@ class ThemeTweaker(object):
                 pass
         return found
 
-    def _theme_valid(self, scheme_file):
+    def _theme_valid(self, scheme_file, noedit=False):
         is_working = scheme_file.startswith(TEMP_PATH + '/')
         if is_working and self.scheme_map is not None and self.scheme_map["working"] == scheme_file and self._exists(self.scheme_map["original"]):
             if self._exists(self.scheme_map["working"]):
                 self.scheme_file = packages_path(self.scheme_map["original"])
                 self.scheme_clone = packages_path(self.scheme_map["working"])
             else:
-                # Recover form missing temp
+                # Recover from missing temp
                 log("Revert to original because temp is missing")
                 if self.set_safe:
                     self._set_theme_safely(self.scheme_map["original"])
@@ -233,7 +236,7 @@ class ThemeTweaker(object):
                 self.p_settings["scheme_map"] = self.scheme_map
                 self._save_tweak_settings()
             return True
-        elif not is_working:
+        elif not is_working and not noedit:
             self._ensure_temp()
             content = sublime.load_binary_resource(scheme_file)
             self.scheme_file = packages_path(scheme_file)
@@ -252,19 +255,19 @@ class ThemeTweaker(object):
             except Exception as e:
                 log(e)
                 sublime.error_message("Cannot clone theme")
-                return
+                return False
         return False
 
-    def _setup(self, context=None):
+    def _setup(self, context=None, noedit=False):
         self.filters = []
         self.settings = sublime.load_settings(PREFERENCES)
         self.p_settings = self._load_tweak_settings()
         scheme_file = self.settings.get(SCHEME, None) if self.init_theme is None else self.init_theme
         self.scheme_map = self.p_settings.get("scheme_map", None)
-        self.theme_valid = self._theme_valid(scheme_file)
+        self.theme_valid = self._theme_valid(scheme_file, noedit=noedit)
 
     def clear(self):
-        self._setup()
+        self._setup(noedit=True)
 
         if self.theme_valid:
             with open(self.scheme_clone, "wb") as f:
@@ -273,23 +276,28 @@ class ThemeTweaker(object):
                 self.scheme_map["undo"] = ""
                 self.p_settings["scheme_map"] = self.scheme_map
                 self._save_tweak_settings()
+        else:
+            log("Theme has not been tweaked!", status=True)
 
     def clear_history(self):
-        self._setup()
+        self._setup(noedit=True)
 
         if self.theme_valid:
             self.scheme_map["redo"] = ""
             self.scheme_map["undo"] = ""
             self.p_settings["scheme_map"] = self.scheme_map
             self._save_tweak_settings()
+        else:
+            log("Theme has not been tweaked!", status=True)
 
     def undo(self):
-        self._setup()
+        self._setup(noedit=True)
 
         if self.theme_valid:
             plist = sublime.load_binary_resource(self.scheme_map["original"])
             undo = self.scheme_map["undo"].split(";")
-            if len(undo) == 0:
+            if len(undo) == 0 or (len(undo) == 1 and undo[0] == ""):
+                log("Nothing to undo!", status=True)
                 return
             redo = self.scheme_map["redo"].split(";")
             redo.append(undo.pop())
@@ -303,14 +311,17 @@ class ThemeTweaker(object):
                 f.write(writePlistToBytes(self.plist_file))
                 self.p_settings["scheme_map"] = self.scheme_map
                 self._save_tweak_settings()
+        else:
+            log("Theme has not been tweaked!", status=True)
 
     def redo(self):
-        self._setup()
+        self._setup(noedit=True)
 
         if self.theme_valid:
             plist = sublime.load_binary_resource(self.scheme_map["original"])
             redo = self.scheme_map["redo"].split(";")
-            if len(redo) == 0:
+            if len(redo) == 0 or (len(redo) == 1 and redo[0] == ""):
+                log("Nothing to redo!", status=True)
                 return
             undo = self.scheme_map["undo"].split(";")
             undo.append(redo.pop())
@@ -324,9 +335,11 @@ class ThemeTweaker(object):
                 f.write(writePlistToBytes(self.plist_file))
                 self.p_settings["scheme_map"] = self.scheme_map
                 self._save_tweak_settings()
+        else:
+            log("Theme has not been tweaked!", status=True)
 
-    def refresh(self):
-        self._setup()
+    def refresh(self, noedit=False):
+        self._setup(noedit=noedit)
 
     def run(self, filters):
         self._setup()
@@ -370,6 +383,6 @@ def plugin_loaded():
 
     # Just in case something went wrong,
     # and a theme got removed or isn't there on startup
-    ThemeTweaker().refresh()
+    ThemeTweaker().refresh(noedit=True)
     THEME_TWEAKER_READY = True
     sublime.run_command("theme_tweaker_is_ready")
