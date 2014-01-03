@@ -33,7 +33,7 @@ def log(msg, status=False):
 
 
 def debug_log(s):
-    if SETTINGS.get("debug", False):
+    if sublime.load_settings(PLUGIN_SETTINGS).get("debug", False):
         log(s)
 
 
