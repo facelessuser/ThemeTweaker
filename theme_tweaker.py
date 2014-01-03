@@ -366,8 +366,12 @@ class ThemeTweakerIsReadyCommand(sublime_plugin.ApplicationCommand):
     def is_tweakable(cls):
         return THEME_TWEAKER_READY
 
+    @classmethod
+    def is_ready(cls):
+        return THEME_TWEAKER_READY
+
     def run(self):
-        tweakable = ThemeTweakerIsReadyCommand.is_tweakable()
+        tweakable = ThemeTweakerIsReadyCommand.is_ready()
         if tweakable:
             log("Ready to tweak!")
 
