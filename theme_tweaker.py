@@ -6,10 +6,8 @@ Copyright (c) 2013 Isaac Muse <isaacmuse@gmail.com>
 import sublime
 import sublime_plugin
 from os import makedirs
-from os.path import join, basename, exists, abspath, dirname, normpath
+from os.path import join, basename, exists, dirname, normpath
 from plistlib import readPlistFromBytes, writePlistToBytes
-import re
-from ThemeTweaker.lib.rgba import RGBA
 from ThemeTweaker.lib.file_strip.json import sanitize_json
 from ThemeTweaker.lib.color_scheme_tweaker import ColorSchemeTweaker
 import json
@@ -96,6 +94,7 @@ class ThemeTweakerInvertCommand(sublime_plugin.ApplicationCommand):
             ThemeTweaker(theme).run("invert@%s" % context)
         else:
             ThemeTweaker(theme).run("invert")
+
 
 class ThemeTweakerSepiaCommand(sublime_plugin.ApplicationCommand):
     def run(self, context=None, theme=None):
