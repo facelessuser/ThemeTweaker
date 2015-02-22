@@ -114,7 +114,7 @@ class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerGlowCommand(sublime_plugin.ApplicationCommand):
-    def run(self, intensity, theme=None):
+    def run(self, intensity=None, theme=None):
         value = float(get_setting("glow_intensity", intensity, .2))
         ThemeTweaker(theme).run("glow(%f)" % value)
 
