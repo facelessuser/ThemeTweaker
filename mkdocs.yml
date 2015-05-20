@@ -3,9 +3,11 @@ repo_url: https://github.com/facelessuser/ThemeTweaker
 site_description: Tweak your color theme (scheme) in Sublime Text.
 copyright: Copyright &copy; 2013 - 2015 <a href="https://github.com/facelessuser">Isaac Muse</a>
 pages:
-- ['index.md', 'Home']
-- ['usage.md', 'User Guide']
-- ['license.md', 'License']
+- About ThemeTweaker: index.md
+- Installation: installation.md
+- User Guide: usage.md
+- Contributing & Support: contributing.md
+- License: license.md
 theme: readthedocs
 theme_dir: doc_theme
 markdown_extensions:
@@ -13,7 +15,8 @@ markdown_extensions:
 - markdown.extensions.admonition
 - markdown.extensions.smarty
 - markdown.extensions.nl2br
-- markdown.extensions.codehilite
+- markdown.extensions.codehilite:
+    guess_lang: false
 - pymdownx.inlinehilite
 - pymdownx.magiclink
 - pymdownx.betterem

@@ -1,8 +1,9 @@
-'''
-Theme Tweaker
+"""
+Theme Tweaker.
+
 Licensed under MIT
 Copyright (c) 2013 Isaac Muse <isaacmuse@gmail.com>
-'''
+"""
 import sublime
 import sublime_plugin
 from os import makedirs
@@ -24,6 +25,8 @@ THEME_TWEAKER_READY = False
 
 
 def log(msg, status=False):
+    """Standard log message."""
+
     string = str(msg)
     print("ThemeTweaker: %s" % string)
     if status:
@@ -31,15 +34,25 @@ def log(msg, status=False):
 
 
 def debug_log(s):
+    """Debug log message."""
+
     if sublime.load_settings(PLUGIN_SETTINGS).get("debug", False):
         log(s)
 
 
 def packages_path(pth):
+    """Get packages path."""
+
     return join(dirname(sublime.packages_path()), normpath(pth))
 
 
 def get_setting(setting, override, default):
+    """
+    Get the provided setting.
+
+    If override is provided, just return that.
+    """
+
     value = override
     if value is None:
         value = sublime.load_settings(PLUGIN_SETTINGS).get(setting, default)
@@ -47,7 +60,12 @@ def get_setting(setting, override, default):
 
 
 class ToggleThemeTweakerModeCommand(sublime_plugin.ApplicationCommand):
+
+    """Toggle the theme tweak mode on/off."""
+
     def run(self):
+        """Run command."""
+
         global TWEAK_MODE
         TWEAK_MODE = not TWEAK_MODE
         sublime.status_message("TweakMode is %s" % ("enabled" if TWEAK_MODE else "disabled"))
@@ -56,7 +74,12 @@ class ToggleThemeTweakerModeCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerBrightnessCommand(sublime_plugin.ApplicationCommand):
+
+    """Tweak brightness."""
+
     def run(self, direction="+", step=None, context=None, theme=None):
+        """Run command."""
+
         magnitude = -1.0 if direction == "-" else 1.0
         value = float(get_setting("brightness_step", step, .01)) * magnitude
         if value > -1.0 and value < 1.0:
@@ -67,7 +90,12 @@ class ThemeTweakerBrightnessCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerSaturationCommand(sublime_plugin.ApplicationCommand):
+
+    """Tweak Saturation."""
+
     def run(self, direction="+", step=None, context=None, theme=None):
+        """Run command."""
+
         magnitude = -1.0 if direction == "-" else 1.0
         value = float(get_setting("saturation_step", step, .1)) * magnitude
         if value > -1.0 and value < 1.0:
@@ -78,7 +106,12 @@ class ThemeTweakerSaturationCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerHueCommand(sublime_plugin.ApplicationCommand):
+
+    """Tweak hue."""
+
     def run(self, direction="+", step=None, context=None, theme=None):
+        """Run command."""
+
         magnitude = -1 if direction == "-" else 1
         value = int(get_setting("hue_step", step, 10)) * magnitude
         if value >= -360 and value <= 360:
@@ -89,7 +122,12 @@ class ThemeTweakerHueCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerInvertCommand(sublime_plugin.ApplicationCommand):
+
+    """Invert colors."""
+
     def run(self, context=None, theme=None):
+        """Run command."""
+
         if context is not None and context in ["fg", "bg"]:
             ThemeTweaker(theme).run("invert@%s" % context)
         else:
@@ -97,7 +135,12 @@ class ThemeTweakerInvertCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerSepiaCommand(sublime_plugin.ApplicationCommand):
+
+    """Apply sepia filter."""
+
     def run(self, context=None, theme=None):
+        """Run command."""
+
         if context is not None and context in ["fg", "bg"]:
             ThemeTweaker(theme).run("sepia@%s" % context)
         else:
@@ -105,7 +148,12 @@ class ThemeTweakerSepiaCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
+
+    """Colorize the theme with the given hue."""
+
     def run(self, hue=None, context=None, theme=None):
+        """Run command."""
+
         value = int(get_setting("colorize_hue", hue, 0))
         if context is not None and context in ["fg", "bg"]:
             ThemeTweaker(theme).run("colorize(%d)@%s" % (value, context))
@@ -114,13 +162,23 @@ class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerGlowCommand(sublime_plugin.ApplicationCommand):
+
+    """Apply glow effect."""
+
     def run(self, intensity=None, theme=None):
+        """Run command."""
+
         value = float(get_setting("glow_intensity", intensity, .2))
         ThemeTweaker(theme).run("glow(%f)" % value)
 
 
 class ThemeTweakerGrayscaleCommand(sublime_plugin.ApplicationCommand):
+
+    """Apply grayscale filter."""
+
     def run(self, context=None, theme=None):
+        """Run command."""
+
         if context is not None and context in ["fg", "bg"]:
             ThemeTweaker(theme).run("grayscale@%s" % context)
         else:
@@ -128,31 +186,58 @@ class ThemeTweakerGrayscaleCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerCustomCommand(sublime_plugin.ApplicationCommand):
+
+    """Custom tweak command which takes filter options."""
+
     def run(self, filters, theme=None):
+        """Run command."""
+
         ThemeTweaker(theme).run(filters)
 
 
 class ThemeTweakerClearCommand(sublime_plugin.ApplicationCommand):
+
+    """Clear current tweaks."""
+
     def run(self):
+        """Run command."""
+
         ThemeTweaker().clear()
 
 
 class ThemeTweakerUndoCommand(sublime_plugin.ApplicationCommand):
+
+    """Undo last tweak."""
+
     def run(self):
+        """Run command."""
+
         ThemeTweaker().undo()
 
 
 class ThemeTweakerRedoCommand(sublime_plugin.ApplicationCommand):
+
+    """Redo last tweak."""
+
     def run(self):
+        """Run command."""
+
         ThemeTweaker().redo()
 
 
 class ThemeTweaker(object):
+
+    """Main tweak logic."""
+
     def __init__(self, init_theme=None, set_safe=False):
+        """Initialize."""
+
         self.set_safe = set_safe
         self.init_theme = init_theme
 
     def _load_tweak_settings(self):
+        """Load the tweak settings."""
+
         self._ensure_temp()
         p_settings = {}
         tweaks = packages_path(join(normpath(TEMP_PATH), basename(TWEAK_SETTINGS)))
@@ -162,20 +247,30 @@ class ThemeTweaker(object):
                     # Allow C style comments and be forgiving of trailing commas
                     content = sanitize_json(f.read(), True)
                 p_settings = json.loads(content)
-            except:
+            except Exception:
                 pass
         return p_settings
 
     def _save_tweak_settings(self):
+        """Save the tweak settings."""
+
         tweaks = packages_path(join(normpath(TEMP_PATH), basename(TWEAK_SETTINGS)))
         j = json.dumps(self.p_settings, sort_keys=True, indent=4, separators=(',', ': '))
         try:
             with open(tweaks, 'w') as f:
                 f.write(j + "\n")
-        except:
+        except Exception:
             pass
 
     def _set_theme_safely(self, name):
+        """
+        Safe variant of setting theme.
+
+        At one point, Sublime would be left with an empty Preference file
+        if you modified it too soon.  So manually reading ws the safest.
+        The problem may or may not exist now.
+        """
+
         pref_file = join(sublime.packages_path(), 'User', 'Preferences.sublime-settings')
         pref = {}
         if exists(pref_file):
@@ -184,22 +279,26 @@ class ThemeTweaker(object):
                     # Allow C style comments and be forgiving of trailing commas
                     content = sanitize_json(f.read(), True)
                 pref = json.loads(content)
-            except:
+            except Exception:
                 pass
         pref[SCHEME] = name
         j = json.dumps(pref, sort_keys=True, indent=4, separators=(',', ': '))
         try:
             with open(pref_file, 'w') as f:
                 f.write(j + "\n")
-        except:
+        except Exception:
             pass
 
     def _ensure_temp(self):
+        """Ensure temp path exists."""
+
         temp = packages_path(TEMP_PATH)
         if not exists(temp):
             makedirs(temp)
 
     def _exists(self, pth):
+        """Check if theme exists."""
+
         found = False
         if exists(packages_path(pth)):
             found = True
@@ -213,13 +312,19 @@ class ThemeTweaker(object):
                             break
                 else:
                     found = pth in results
-            except:
+            except Exception:
                 pass
         return found
 
     def _theme_valid(self, scheme_file, noedit=False):
+        """Check if theme is valid."""
+
         is_working = scheme_file.startswith(TEMP_PATH + '/')
-        if is_working and self.scheme_map is not None and self.scheme_map["working"] == scheme_file and self._exists(self.scheme_map["original"]):
+        if (
+            is_working and self.scheme_map is not None and
+            self.scheme_map["working"] == scheme_file and
+            self._exists(self.scheme_map["original"])
+        ):
             if self._exists(self.scheme_map["working"]):
                 self.scheme_file = packages_path(self.scheme_map["original"])
                 self.scheme_clone = packages_path(self.scheme_map["working"])
@@ -243,7 +348,12 @@ class ThemeTweaker(object):
             try:
                 with open(self.scheme_clone, "wb") as f:
                     f.write(content)
-                self.scheme_map = {"original": scheme_file, "working": "%s/%s" % (TEMP_PATH, basename(scheme_file)), "undo": "", "redo": ""}
+                self.scheme_map = {
+                    "original": scheme_file,
+                    "working": "%s/%s" % (TEMP_PATH, basename(scheme_file)),
+                    "undo": "",
+                    "redo": ""
+                }
                 if self.set_safe:
                     self._set_theme_safely(self.scheme_map["working"])
                 else:
@@ -257,7 +367,9 @@ class ThemeTweaker(object):
                 return False
         return False
 
-    def _setup(self, context=None, noedit=False):
+    def _setup(self, noedit=False):
+        """Setup."""
+
         self.filters = []
         self.settings = sublime.load_settings(PREFERENCES)
         self.p_settings = self._load_tweak_settings()
@@ -266,6 +378,8 @@ class ThemeTweaker(object):
         self.theme_valid = self._theme_valid(scheme_file, noedit=noedit)
 
     def clear(self):
+        """Clear tweaks."""
+
         self._setup(noedit=True)
 
         if self.theme_valid:
@@ -279,6 +393,8 @@ class ThemeTweaker(object):
             log("Theme has not been tweaked!", status=True)
 
     def clear_history(self):
+        """Clear the history."""
+
         self._setup(noedit=True)
 
         if self.theme_valid:
@@ -290,6 +406,8 @@ class ThemeTweaker(object):
             log("Theme has not been tweaked!", status=True)
 
     def undo(self):
+        """Revert last change."""
+
         self._setup(noedit=True)
 
         if self.theme_valid:
@@ -314,6 +432,8 @@ class ThemeTweaker(object):
             log("Theme has not been tweaked!", status=True)
 
     def redo(self):
+        """Redo last reverted change."""
+
         self._setup(noedit=True)
 
         if self.theme_valid:
@@ -338,9 +458,13 @@ class ThemeTweaker(object):
             log("Theme has not been tweaked!", status=True)
 
     def refresh(self, noedit=False):
+        """Refresh."""
+
         self._setup(noedit=noedit)
 
     def run(self, filters):
+        """Run command."""
+
         self._setup()
 
         if self.theme_valid:
@@ -353,7 +477,7 @@ class ThemeTweaker(object):
 
             with open(self.scheme_clone, "wb") as f:
                 f.write(writePlistToBytes(self.plist_file))
-                undo = self.scheme_map["undo"].split(";") + ct._get_filters()
+                undo = self.scheme_map["undo"].split(";") + ct.get_filters()
                 self.scheme_map["redo"] = ""
                 self.scheme_map["undo"] = ";".join(undo)
                 self.p_settings["scheme_map"] = self.scheme_map
@@ -361,26 +485,42 @@ class ThemeTweaker(object):
 
 
 class ThemeTweakerIsReadyCommand(sublime_plugin.ApplicationCommand):
+
+    """Command that can be called to test whether ThemeTweaker is ready."""
+
     @classmethod
     def is_tweakable(cls):
+        """Check if tweakable (redundant; should remove)."""
+
         return THEME_TWEAKER_READY
 
     @classmethod
     def is_ready(cls):
+        """Check if tweaker is ready."""
+
         return THEME_TWEAKER_READY
 
     def run(self):
+        """Run command."""
+
         tweakable = ThemeTweakerIsReadyCommand.is_ready()
         if tweakable:
             log("Ready to tweak!")
 
 
 class ThemeTweakerListener(sublime_plugin.EventListener):
+
+    """Listen for tweak shortcut."""
+
     def on_query_context(self, view, key, operator, operand, match_all):
+        """Check context of command."""
+
         return key == "theme_tweaker" and TWEAK_MODE
 
 
 def plugin_loaded():
+    """Setup plugin."""
+
     global THEME_TWEAKER_READY
     THEME_TWEAKER_READY = False
 
