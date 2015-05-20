@@ -1,3 +1,5 @@
+[![Unix Build Status][travis-image]][travis-link]
+![License][license-image]
 # ThemeTweaker
 Change your Sublime tmTheme files by applying different color filters on the fly.
 
@@ -45,3 +47,7 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[travis-image]: https://img.shields.io/travis/facelessuser/ThemeTweaker.svg
+[travis-link]: https://travis-ci.org/facelessuser/ThemeTweaker
+[license-image]: https://img.shields.io/badge/license-MIT-blue.svg

@@ -1,6 +1,5 @@
 # ThemeTweaker {: .doctitle}
 Tweak your color theme (scheme) in Sublime Text.
-{: .doctitle-info}
 
 ---
 
