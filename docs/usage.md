@@ -3,12 +3,12 @@ Configuration and usage of ThemeTweaker.
 
 ---
 
-# Overview
+# #Overview
 In order to use ThemeTweaker, you can set up command palette commands, keymaps, menu items etc.  ThemeTweaker comes with an example keymap file to show how commands are constructed.
 
 The default steps, or hues, or intensities (depending on the command), are defined in the settings file.  These can be changed if desired.
 
-# Basic commands
+## Basic commands
 
 | Action | Description |
 |--------|-------------|
