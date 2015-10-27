@@ -134,6 +134,8 @@ class ColorSchemeTweaker(object):
                 filters.append(f[0] + "(%d)" % int(f[1]))
             elif f[0] in ["saturation", "brightness"]:
                 filters.append(f[0] + "(%f)" % f[1])
+            elif f[0] == 'glow':
+                filters.append(f[0] + "(%f)" % f[1])
             else:
                 continue
             if f[2] != "all":
