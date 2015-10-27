@@ -60,7 +60,6 @@ def get_setting(setting, override, default):
 
 
 class ToggleThemeTweakerModeCommand(sublime_plugin.ApplicationCommand):
-
     """Toggle the theme tweak mode on/off."""
 
     def run(self):
@@ -74,7 +73,6 @@ class ToggleThemeTweakerModeCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerBrightnessCommand(sublime_plugin.ApplicationCommand):
-
     """Tweak brightness."""
 
     def run(self, direction="+", step=None, context=None, theme=None):
@@ -90,7 +88,6 @@ class ThemeTweakerBrightnessCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerSaturationCommand(sublime_plugin.ApplicationCommand):
-
     """Tweak Saturation."""
 
     def run(self, direction="+", step=None, context=None, theme=None):
@@ -106,7 +103,6 @@ class ThemeTweakerSaturationCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerHueCommand(sublime_plugin.ApplicationCommand):
-
     """Tweak hue."""
 
     def run(self, direction="+", step=None, context=None, theme=None):
@@ -122,7 +118,6 @@ class ThemeTweakerHueCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerInvertCommand(sublime_plugin.ApplicationCommand):
-
     """Invert colors."""
 
     def run(self, context=None, theme=None):
@@ -135,7 +130,6 @@ class ThemeTweakerInvertCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerSepiaCommand(sublime_plugin.ApplicationCommand):
-
     """Apply sepia filter."""
 
     def run(self, context=None, theme=None):
@@ -148,7 +142,6 @@ class ThemeTweakerSepiaCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
-
     """Colorize the theme with the given hue."""
 
     def run(self, hue=None, context=None, theme=None):
@@ -162,7 +155,6 @@ class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerGlowCommand(sublime_plugin.ApplicationCommand):
-
     """Apply glow effect."""
 
     def run(self, intensity=None, theme=None):
@@ -173,7 +165,6 @@ class ThemeTweakerGlowCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerGrayscaleCommand(sublime_plugin.ApplicationCommand):
-
     """Apply grayscale filter."""
 
     def run(self, context=None, theme=None):
@@ -186,7 +177,6 @@ class ThemeTweakerGrayscaleCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerCustomCommand(sublime_plugin.ApplicationCommand):
-
     """Custom tweak command which takes filter options."""
 
     def run(self, filters, theme=None):
@@ -196,7 +186,6 @@ class ThemeTweakerCustomCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerClearCommand(sublime_plugin.ApplicationCommand):
-
     """Clear current tweaks."""
 
     def run(self):
@@ -206,7 +195,6 @@ class ThemeTweakerClearCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerUndoCommand(sublime_plugin.ApplicationCommand):
-
     """Undo last tweak."""
 
     def run(self):
@@ -216,7 +204,6 @@ class ThemeTweakerUndoCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerRedoCommand(sublime_plugin.ApplicationCommand):
-
     """Redo last tweak."""
 
     def run(self):
@@ -226,7 +213,6 @@ class ThemeTweakerRedoCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweaker(object):
-
     """Main tweak logic."""
 
     def __init__(self, init_theme=None, set_safe=False):
@@ -485,7 +471,6 @@ class ThemeTweaker(object):
 
 
 class ThemeTweakerIsReadyCommand(sublime_plugin.ApplicationCommand):
-
     """Command that can be called to test whether ThemeTweaker is ready."""
 
     @classmethod
@@ -509,7 +494,6 @@ class ThemeTweakerIsReadyCommand(sublime_plugin.ApplicationCommand):
 
 
 class ThemeTweakerListener(sublime_plugin.EventListener):
-
     """Listen for tweak shortcut."""
 
     def on_query_context(self, view, key, operator, operand, match_all):

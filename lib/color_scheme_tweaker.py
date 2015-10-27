@@ -20,7 +20,6 @@ FILTER_MATCH = re.compile(
 
 
 class ColorSchemeTweaker(object):
-
     """Tweak the color scheme with the provided filter(s)."""
 
     def _apply_filter(self, color, f_name, value=None):
