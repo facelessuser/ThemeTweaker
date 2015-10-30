@@ -6,6 +6,7 @@ Copyright (c) 2013 Isaac Muse <isaacmuse@gmail.com>
 """
 import sublime
 import sublime_plugin
+import re
 from os import makedirs
 from os.path import join, basename, exists, dirname, normpath
 from plistlib import readPlistFromBytes, writePlistToBytes
@@ -397,7 +398,10 @@ class ThemeTweaker(object):
         self._setup(noedit=True)
 
         if self.theme_valid:
-            plist = sublime.load_binary_resource(self.scheme_map["original"])
+            plist = re.sub(
+                br"^[\r\n\s]*<!--[\s\S]*?-->[\s\r\n]*|<!--[\s\S]*?-->", b'',
+                sublime.load_binary_resource(self.scheme_map["original"])
+            )
             undo = self.scheme_map["undo"].split(";")
             if len(undo) == 0 or (len(undo) == 1 and undo[0] == ""):
                 log("Nothing to undo!", status=True)
@@ -423,7 +427,10 @@ class ThemeTweaker(object):
         self._setup(noedit=True)
 
         if self.theme_valid:
-            plist = sublime.load_binary_resource(self.scheme_map["original"])
+            plist = re.sub(
+                br"^[\r\n\s]*<!--[\s\S]*?-->[\s\r\n]*|<!--[\s\S]*?-->", b'',
+                sublime.load_binary_resource(self.scheme_map["original"])
+            )
             redo = self.scheme_map["redo"].split(";")
             if len(redo) == 0 or (len(redo) == 1 and redo[0] == ""):
                 log("Nothing to redo!", status=True)
@@ -454,7 +461,10 @@ class ThemeTweaker(object):
         self._setup()
 
         if self.theme_valid:
-            plist = sublime.load_binary_resource(self.scheme_map["working"])
+            plist = re.sub(
+                br"^[\r\n\s]*<!--[\s\S]*?-->[\s\r\n]*|<!--[\s\S]*?-->", b'',
+                sublime.load_binary_resource(self.scheme_map["working"])
+            )
             ct = ColorSchemeTweaker()
             self.plist_file = ct.tweak(
                 readPlistFromBytes(plist),
