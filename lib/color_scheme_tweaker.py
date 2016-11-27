@@ -6,6 +6,7 @@ Copyright (c) 2013 - 2015 Isaac Muse <isaacmuse@gmail.com>
 """
 from __future__ import absolute_import
 from .rgba import RGBA
+from . import csscolors
 import re
 
 FILTER_MATCH = re.compile(
@@ -62,7 +63,7 @@ class ColorSchemeTweaker(object):
             name = f[0]
             value = f[1]
             context = f[2]
-            if name in ["grayscale", "sepia", "invert"]:
+            if name in ("grayscale", "sepia", "invert"):
                 if context != "bg":
                     self._apply_filter(rgba_fg, name)
                 if context != "fg":
@@ -102,18 +103,26 @@ class ColorSchemeTweaker(object):
             for settings in tmtheme["settings"]:
                 if not general_settings_read:
                     for k, v in settings["settings"].items():
-                        if k in ["background", "gutter", "lineHighlight", "selection"]:
-                            _, v = self._filter_colors(None, v, global_settings=True)
+                        if k in ("background", "gutter", "lineHighlight", "selection"):
+                            _, v = self._filter_colors(None, self.process_color(v), global_settings=True)
                         else:
-                            v, _ = self._filter_colors(v, global_settings=True)
+                            v, _ = self._filter_colors(self.process_color(v), global_settings=True)
                         settings["settings"][k] = v
                     general_settings_read = True
                     continue
-                self.bground = RGBA(tmtheme["settings"][0]["settings"].get("background", '#FFFFFF')).get_rgb()
-                self.fground = RGBA(tmtheme["settings"][0]["settings"].get("foreground", '#000000')).get_rgba()
+                self.bground = RGBA(
+                    self.process_color(
+                        tmtheme["settings"][0]["settings"].get("background", '#FFFFFF')
+                    )
+                ).get_rgb()
+                self.fground = RGBA(
+                    self.process_color(
+                        tmtheme["settings"][0]["settings"].get("foreground", '#000000')
+                    )
+                ).get_rgba()
                 foreground, background = self._filter_colors(
-                    settings["settings"].get("foreground", None),
-                    settings["settings"].get("background", None)
+                    self.process_color(settings["settings"].get("foreground", None)),
+                    self.process_color(settings["settings"].get("background", None))
                 )
                 if foreground is not None:
                     settings["settings"]["foreground"] = foreground
@@ -122,16 +131,28 @@ class ColorSchemeTweaker(object):
 
         return tmtheme
 
+    def process_color(self, color):
+        """Process the color."""
+
+        if color is None or color.strip() == "":
+            return None
+
+        if not color.startswith('#'):
+            color = csscolors.name2hex(color)
+            if color is None:
+                return None
+        return color
+
     def get_filters(self):
         """Get the filters."""
 
         filters = []
         for f in self.filters:
-            if f[0] in ["invert", "grayscale", "sepia"]:
+            if f[0] in ("invert", "grayscale", "sepia"):
                 filters.append(f[0])
-            elif f[0] in ["hue", "colorize"]:
+            elif f[0] in ("hue", "colorize"):
                 filters.append(f[0] + "(%d)" % int(f[1]))
-            elif f[0] in ["saturation", "brightness"]:
+            elif f[0] in ("saturation", "brightness"):
                 filters.append(f[0] + "(%f)" % f[1])
             elif f[0] == 'glow':
                 filters.append(f[0] + "(%f)" % f[1])
