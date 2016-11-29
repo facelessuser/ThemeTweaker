@@ -6,7 +6,7 @@ Copyright (c) 2013 - 2015 Isaac Muse <isaacmuse@gmail.com>
 """
 from __future__ import absolute_import
 from .rgba import RGBA
-from . import csscolors
+from . import x11colors
 import re
 
 FILTER_MATCH = re.compile(
@@ -138,7 +138,7 @@ class ColorSchemeTweaker(object):
             return None
 
         if not color.startswith('#'):
-            color = csscolors.name2hex(color)
+            color = x11colors.name2hex(color)
             if color is None:
                 return None
         return color
