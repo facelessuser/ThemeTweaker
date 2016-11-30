@@ -1,13 +1,10 @@
 [
     {
-        "caption": "Preferences",
-        "mnemonic": "n",
         "id": "preferences",
         "children":
         [
             {
                 "caption": "Package Settings",
-                "mnemonic": "P",
                 "id": "package-settings",
                 "children":
                 [
@@ -28,6 +25,37 @@
                                     "file": "${packages}/User/theme_tweaker.sublime-settings"
                                 },
                                 "caption": "Settings – User"
+                            },
+                            { "caption": "-" },
+                            {
+                                "caption": "Changelog",
+                                "command": "theme_tweaker_changes"
+                            },
+                            {
+                                "caption": "Documentation",
+                                "command": "theme_tweaker_open_site",
+                                "args": {
+                                    "url": "http://facelessuser.github.io/ThemeTweaker/"
+                                }
+                            },
+                            {
+                                "caption": "Quick Start Guide",
+                                "command": "theme_tweaker_doc",
+                                "args": {
+                                    "page": "${packages}/ThemeTweaker/quickstart.md"
+                                }
+                            },
+                            { "caption": "-" },
+                            {
+                                "caption": "Support Info",
+                                "command": "theme_tweaker_support_info"
+                            },
+                            {
+                                "caption": "Issues",
+                                "command": "theme_tweaker_open_site",
+                                "args": {
+                                    "url": "https://github.com/facelessuser/ThemeTweaker/issues"
+                                }
                             }
                         ]
                     }

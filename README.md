@@ -1,4 +1,5 @@
 [![Unix Build Status][travis-image]][travis-link]
+[![Package Control Downloads][pc-image]][pc-link]
 ![License][license-image]
 # ThemeTweaker
 Change your Sublime tmTheme files by applying different color filters on the fly.
@@ -29,7 +30,7 @@ http://facelessuser.github.io/ThemeTweaker/
 # License
 The MIT License (MIT)
 
-Copyright (c) 2013 - 2015 Isaac Muse
+Copyright (c) 2013 - 2016 Isaac Muse
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -50,4 +51,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 [travis-image]: https://img.shields.io/travis/facelessuser/ThemeTweaker/master.svg
 [travis-link]: https://travis-ci.org/facelessuser/ThemeTweaker
+[pc-image]: https://img.shields.io/packagecontrol/dt/ThemeTweaker.svg
+[pc-link]: https://packagecontrol.io/packages/ThemeTweaker
 [license-image]: https://img.shields.io/badge/license-MIT-blue.svg
