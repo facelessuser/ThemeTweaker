@@ -103,10 +103,11 @@ class ColorSchemeTweaker(object):
             for settings in tmtheme["settings"]:
                 if not general_settings_read:
                     for k, v in settings["settings"].items():
-                        if k in ("background", "gutter", "lineHighlight", "selection"):
-                            _, v = self._filter_colors(None, self.process_color(v), global_settings=True)
-                        else:
-                            v, _ = self._filter_colors(self.process_color(v), global_settings=True)
+                        if not k.endswith('Css'):
+                            if k in ("background", "gutter", "lineHighlight", "selection"):
+                                _, v = self._filter_colors(None, self.process_color(v), global_settings=True)
+                            else:
+                                v, _ = self._filter_colors(self.process_color(v), global_settings=True)
                         settings["settings"][k] = v
                     general_settings_read = True
                     continue
