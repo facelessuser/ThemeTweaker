@@ -68,7 +68,7 @@ class ColorSchemeTweaker(object):
                     self._apply_filter(rgba_fg, name)
                 if context != "fg":
                     self._apply_filter(rgba_bg, name)
-            elif name in ["saturation", "brightness", "hue", "colorize"]:
+            elif name in ("saturation", "brightness", "hue", "colorize"):
                 if context != "bg":
                     self._apply_filter(rgba_fg, name, value)
                 if context != "fg":
