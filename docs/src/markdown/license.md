@@ -1,6 +1,4 @@
-# License {: .doctitle}
-
----
+# License
 
 The MIT License (MIT)
 

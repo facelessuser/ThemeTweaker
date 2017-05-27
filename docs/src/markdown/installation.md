@@ -4,11 +4,12 @@ Installing ThemeTweaker.
 ---
 
 ## Package Control
-The recommended way to install ThemeTweaker is via [Package Control](https://packagecontrol.io/).  Package Control will install the correct branch on your system and keep it up to date.
 
-1. Ensure Package Control is installed.  Instructions are found [here](https://packagecontrol.io/installation).
+The recommended way to install ThemeTweaker is via [Package Control][package-control].  Package Control will install the correct branch on your system and keep it up to date.
 
-2. In Sublime Text, press <kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>p</kbd> (Win, Linux) or <kbd>cmd</kbd> + <kbd>shift</kbd> + <kbd>p</kbd> (OSX) to bring up the quick panel.  It will show a list of installable plugins.
+1. Ensure Package Control is installed.  Instructions are found [here][package-control-install].
+
+2. In Sublime Text, press ++ctrl+shift+p++ (Win, Linux) or ++cmd+shift+p++ (macOS) to bring up the quick panel.  It will show a list of installable plugins.
 
 3. Start typing `ThemeTweaker`; when you see it, select it.
 
@@ -29,11 +30,11 @@ For those who want to install ExportHtml without package control, here are the s
 
 1. Download the latest releases of the following dependencies and unpack or git clone in the `Packages` folder as shown below:
 
-    - https://bitbucket.org/teddy_beer_maniac/sublime-text-dependency-markupsafe -> markupsafe
-    - https://bitbucket.org/teddy_beer_maniac/sublime-text-dependency-jinja2 -> python-jinja2
-    - https://github.com/packagecontrol/pygments -> pygments
-    - https://github.com/facelessuser/sublime-markdown-popups -> mdpopups
-    - https://github.com/facelessuser/sublime-markdown -> python-markdown
+    - https://bitbucket.org/teddy_beer_maniac/sublime-text-dependency-markupsafe -> `markupsafe`
+    - https://bitbucket.org/teddy_beer_maniac/sublime-text-dependency-jinja2 -> `python-jinja2`
+    - https://github.com/packagecontrol/pygments -> `pygments`
+    - https://github.com/facelessuser/sublime-markdown-popups -> `mdpopups`
+    - https://github.com/facelessuser/sublime-markdown -> `python-markdown`
 
 2. Download and unpack or git clone the latest ExportHtml release and unpack as `ExportHtml`:
 
@@ -206,10 +207,12 @@ For those who want to install ExportHtml without package control, here are the s
 
 1. Quit Sublime Text.
 
-2. Open a terminal and enter the following.  For dependencies replace the url with the appropriate URL, and the appropriate folder to check it out to:
+2. Open a terminal and enter the following.  For dependencies replace the URL with the appropriate URL, and the appropriate folder to check it out to:
     ```
     cd /path/to/Sublime Text 3/Packages
     git clone https://github.com/facelessuser/ThemeTweaker.git ThemeTweaker
     ```
 
 3. Restart Sublime Text.
+
+--8<-- "refs.md"

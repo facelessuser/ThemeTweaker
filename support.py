@@ -5,7 +5,7 @@ import textwrap
 import webbrowser
 import re
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 __pc_name__ = 'ThemeTweaker'
 
 CSS = '''
@@ -131,7 +131,7 @@ class ThemeTweakerDocCommand(sublime_plugin.WindowCommand):
 
         try:
             import mdpopups
-            has_phantom_support = (mdpopups.version() >= (1, 10, 0)) and (int(sublime.version()) >= 3118)
+            has_phantom_support = (mdpopups.version() >= (1, 10, 0)) and (int(sublime.version()) >= 3124)
         except Exception:
             has_phantom_support = False
 
@@ -167,7 +167,7 @@ class ThemeTweakerChangesCommand(sublime_plugin.WindowCommand):
         """Show the changelog in a new view."""
         try:
             import mdpopups
-            has_phantom_support = (mdpopups.version() >= (1, 10, 0)) and (int(sublime.version()) >= 3118)
+            has_phantom_support = (mdpopups.version() >= (1, 10, 0)) and (int(sublime.version()) >= 3124)
         except Exception:
             has_phantom_support = False
 
