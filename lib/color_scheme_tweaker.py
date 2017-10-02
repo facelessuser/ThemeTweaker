@@ -105,10 +105,14 @@ class ColorSchemeTweaker(object):
                     for k, v in settings["settings"].items():
                         if not k.endswith('Css'):
                             if k in ("background", "gutter", "lineHighlight", "selection"):
-                                _, v = self._filter_colors(None, self.process_color(v), global_settings=True)
+                                _, value = self._filter_colors(None, self.process_color(v), global_settings=True)
                             else:
-                                v, _ = self._filter_colors(self.process_color(v), global_settings=True)
-                        settings["settings"][k] = v
+                                value, _ = self._filter_colors(self.process_color(v), global_settings=True)
+                            if value is None:
+                                value = v
+                        else:
+                            value = v
+                        settings["settings"][k] = value
                     general_settings_read = True
                     continue
                 self.bground = RGBA(

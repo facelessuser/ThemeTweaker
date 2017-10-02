@@ -1,3 +1,9 @@
+# ThemeTweaker 1.3.1
+
+Oct 1, 2017
+
+- **FIX**: Plist output would fail when processing global setting that was not a color.
+
 # ThemeTweaker 1.3.0
 
 > Released May 27, 2017
