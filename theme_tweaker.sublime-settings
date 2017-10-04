@@ -8,6 +8,11 @@
     // ThemeTweakerBrightnessCommand command's argument "step"
     "brightness_step": 0.01,
 
+    // Default contrast steps (+/- from 1.0) (range: 0.0 - 1.0)
+    // Can be overridden in the
+    // ThemeTweakerContrastCommand command's argument "step"
+    "contrast_step": 0.25,
+
     // Default colorize default hue (0=Redish)
     // Can be overridden in the
     // ThemeTweakerColorizeCommand command's argument "hue"

@@ -1,3 +1,10 @@
+# ThemeTweaker 1.4.0
+
+Oct 3, 2017
+
+- **NEW**: Add contrast command.
+- **FIX**: Clean up and fix range checking and truncation of colors and scaling factors.
+
 # ThemeTweaker 1.3.1
 
 Oct 1, 2017

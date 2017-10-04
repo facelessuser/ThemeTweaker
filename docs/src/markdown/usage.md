@@ -17,8 +17,22 @@ The default steps, hues, or intensities (depending on the command), are defined 
 
     Parameters  | Type   | Description
     ----------- | ------ | -----------
-    `direction` | string | Accepts a string that is either `+` or '-' to control whether to go brighter or darker respectively.
+    `direction` | string | Accepts a string that is either `+` or `-` to control whether to go brighter or darker respectively.
     `step`      | float  | Controls the brightness magnitude for each step. It is in relation to the center `1.0`.  So a value of `0.01` would shift it `1.01`.
+    `context`   | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
+    `theme`     | string | Theme to adjust.  If none, it will use the current set theme.
+
+### Contrast
+
+`theme_tweaker_contrast`
+: 
+
+    Adjust the contrast of theme.
+
+    Parameters  | Type   | Description
+    ----------- | ------ | -----------
+    `direction` | string | Accepts a string that is either `+` or `-` to control whether to go brighter or darker respectively.
+    `step`      | float  | Controls the contrast magnitude for each step. It is in relation to the center `1.0`.  So a value of `0.01` would shift it `1.01`.
     `context`   | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`     | string | Theme to adjust.  If none, it will use the current set theme.
 
@@ -31,7 +45,7 @@ The default steps, hues, or intensities (depending on the command), are defined 
 
     Parameters  | Type   | Description
     ----------- | ------ | -----------
-    `direction` | string | Accepts a string that is either `+` or '-' to control whether to go brighter or darker respectively.
+    `direction` | string | Accepts a string that is either `+` or `-` to control whether to go brighter or darker respectively.
     `step`      | float  | Controls the brightness magnitude for each step. It is in relation to the center `1.0`.  So a value of `0.01` would shift it `1.01`.
     `context`   | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`     | string | Theme to adjust.  If none, it will use the current set theme.
@@ -45,7 +59,7 @@ The default steps, hues, or intensities (depending on the command), are defined 
 
     Parameters  | Type    | Description
     ----------- | ------- | -----------
-    `direction` | string  | Accepts a string that is either `+` or '-' to control whether to go brighter or darker respectively.
+    `direction` | string  | Accepts a string that is either `+` or `-` to control whether to go brighter or darker respectively.
     `step`      | integer | Accepts an integer which represents a degree between `0` and `360` to shift the hue.
     `context`   | string  | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`     | string  | Theme to adjust.  If none, it will use the current set theme.
@@ -120,6 +134,7 @@ The default steps, hues, or intensities (depending on the command), are defined 
     - invert
     - brightness(float)
     - saturation(float)
+    - contrast(float)
     - hue(signed integer)
     - colorize(integer)
     - glow(positive float)
@@ -196,6 +211,76 @@ Theme tweaker can check for the `theme_tweaker` context to control whether a com
         "direction": "+"
     }
 },
+```
+
+## Settings
+
+The following settings are used to control default values for the provided commands.
+
+### Brightness Step
+
+Controls the default brightness step.  Must be a positive value between 0.0 and 1.0.
+
+```js
+    // Default brightness steps (+/- from 1.0) (range: 0.0 - 1.0)
+    // Can be overridden in the
+    // ThemeTweakerBrightnessCommand command's argument "step"
+    "brightness_step": 0.01,
+```
+
+### Contrast Step
+
+Controls the default contrast step. Must be a positive value between 0.0 and 1.0.
+
+```js
+    // Default contrast steps (+/- from 1.0) (range: 0.0 - 1.0)
+    // Can be overridden in the
+    // ThemeTweakerContrastCommand command's argument "step"
+    "contrast_step": 0.25,
+```
+
+### Saturation Step
+
+Controls the default saturation step. Must be a positive value between 0.0 and 1.0.
+
+```js
+    // Staturation steps (+/- from 1.0) (range: 0.0 - 1.0)
+    // Can be overridden in the
+    // ThemeTweakerSaturationCommand command's argument "step"
+    "saturation_step": 0.1
+```
+
+### Hue Step
+
+Default hue step. Must be an integer from 0 to 360.
+
+```js
+    // Hue step in degrees (range 0-360)
+    // Can be overridden in the
+    // ThemeTweakerHueCommand command's argument "step"
+    "hue_step": 10,
+```
+
+### Colorize Hue
+
+The default hue for colorization.
+
+```js
+    // Default colorize default hue (0=Redish)
+    // Can be overridden in the
+    // ThemeTweakerColorizeCommand command's argument "hue"
+    "colorize_hue": 0,
+```
+
+### Glow Intensity
+
+The default for glow intensity. Must be a value from 0.0 to 1.0.
+
+```js
+    // Default glow intensity (range: 0.0 - 1.0)
+    // Can be overridden in the
+    // ThemeTweakerGlowCommand command's argument "intensity"
+    "glow_intensity": 0.1,
 ```
 
 --8<-- "refs.md"

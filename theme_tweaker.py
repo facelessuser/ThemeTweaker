@@ -81,11 +81,26 @@ class ThemeTweakerBrightnessCommand(sublime_plugin.ApplicationCommand):
 
         magnitude = -1.0 if direction == "-" else 1.0
         value = float(get_setting("brightness_step", step, .01)) * magnitude
-        if value > -1.0 and value < 1.0:
+        if value >= -1.0 and value <= 1.0:
             if context is not None and context in ["fg", "bg"]:
                 ThemeTweaker(theme).run("brightness(%f)@%s" % (value + 1.0, context))
             else:
                 ThemeTweaker(theme).run("brightness(%f)" % (value + 1.0))
+
+
+class ThemeTweakerContrastCommand(sublime_plugin.ApplicationCommand):
+    """Tweak contrast."""
+
+    def run(self, direction="+", step=None, context=None, theme=None):
+        """Run command."""
+
+        magnitude = -1.0 if direction == "-" else 1.0
+        value = float(get_setting("contrast_step", step, .01)) * magnitude
+        if value >= -1.0 and value <= 1.0:
+            if context is not None and context in ["fg", "bg"]:
+                ThemeTweaker(theme).run("contrast(%f)@%s" % (value + 1.0, context))
+            else:
+                ThemeTweaker(theme).run("contrast(%f)" % (value + 1.0))
 
 
 class ThemeTweakerSaturationCommand(sublime_plugin.ApplicationCommand):
@@ -96,7 +111,7 @@ class ThemeTweakerSaturationCommand(sublime_plugin.ApplicationCommand):
 
         magnitude = -1.0 if direction == "-" else 1.0
         value = float(get_setting("saturation_step", step, .1)) * magnitude
-        if value > -1.0 and value < 1.0:
+        if value >= -1.0 and value <= 1.0:
             if context is not None and context in ["fg", "bg"]:
                 ThemeTweaker(theme).run("saturation(%f)@%s" % (value + 1.0, context))
             else:
@@ -162,7 +177,8 @@ class ThemeTweakerGlowCommand(sublime_plugin.ApplicationCommand):
         """Run command."""
 
         value = float(get_setting("glow_intensity", intensity, .2))
-        ThemeTweaker(theme).run("glow(%f)" % value)
+        if value >= 0 and value <= 1.0:
+            ThemeTweaker(theme).run("glow(%f)" % value)
 
 
 class ThemeTweakerGrayscaleCommand(sublime_plugin.ApplicationCommand):

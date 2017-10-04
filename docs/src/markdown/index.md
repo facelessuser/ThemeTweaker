@@ -10,8 +10,9 @@ ThemeTweaker came out as a side project while I was working on ExportHtml.  I wa
 
 ThemeTweaker has a number of commands that allow you to do the following:
 
-- Increase/Decrease brightness.
-- Increase/Decrease saturation.
+- Increase/decrease brightness.
+- Increase/decrease saturation.
+- Increase/decrease contrast.
 - Rotate the hues of the theme.
 - Colorize the theme (make all of the colors different shades of one color).
 - Convert the theme to grayscale.

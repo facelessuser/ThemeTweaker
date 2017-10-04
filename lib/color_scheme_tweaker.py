@@ -12,7 +12,7 @@ import re
 FILTER_MATCH = re.compile(
     r'''(?x)
     ^(?:
-        (brightness|saturation|hue|colorize|glow)\((-?[\d]+|[\d]*\.[\d]+)\)|
+        (brightness|saturation|hue|contrast|colorize|glow)\((-?[\d]+|[\d]*\.[\d]+)\)|
         (sepia|grayscale|invert)
     )
     (?:@(fg|bg))?$
@@ -68,7 +68,7 @@ class ColorSchemeTweaker(object):
                     self._apply_filter(rgba_fg, name)
                 if context != "fg":
                     self._apply_filter(rgba_bg, name)
-            elif name in ("saturation", "brightness", "hue", "colorize"):
+            elif name in ("saturation", "brightness", "hue", "colorize", "contrast"):
                 if context != "bg":
                     self._apply_filter(rgba_fg, name, value)
                 if context != "fg":
@@ -157,7 +157,7 @@ class ColorSchemeTweaker(object):
                 filters.append(f[0])
             elif f[0] in ("hue", "colorize"):
                 filters.append(f[0] + "(%d)" % int(f[1]))
-            elif f[0] in ("saturation", "brightness"):
+            elif f[0] in ("saturation", "brightness", "contrast"):
                 filters.append(f[0] + "(%f)" % f[1])
             elif f[0] == 'glow':
                 filters.append(f[0] + "(%f)" % f[1])
