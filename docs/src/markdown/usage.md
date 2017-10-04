@@ -147,6 +147,7 @@ The default steps, hues, or intensities (depending on the command), are defined 
     A command that allows multiple filters to be chained together.  It takes a string with special syntax to apply filters.  All filters that are available under [Filter Commands](#filter-commands) are configurable.  All operations are defined by a single string.
 
     **Available Filters:**
+
     - grayscale
     - sepia
     - invert
