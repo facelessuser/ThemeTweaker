@@ -15,6 +15,8 @@ The default steps, hues, or intensities (depending on the command), are defined 
 
     Adjust the brightness of theme.
 
+    ![brightness](./imgs/brightness.gif)
+
     Parameters  | Type   | Description
     ----------- | ------ | -----------
     `direction` | string | Accepts a string that is either `+` or `-` to control whether to go brighter or darker respectively.
@@ -28,6 +30,8 @@ The default steps, hues, or intensities (depending on the command), are defined 
 : 
 
     Adjust the contrast of theme.
+
+    ![contrast](./imgs/contrast.gif)
 
     Parameters  | Type   | Description
     ----------- | ------ | -----------
@@ -43,6 +47,8 @@ The default steps, hues, or intensities (depending on the command), are defined 
 
     Adjust the brightness of theme.
 
+    ![saturation](./imgs/saturation.gif)
+
     Parameters  | Type   | Description
     ----------- | ------ | -----------
     `direction` | string | Accepts a string that is either `+` or `-` to control whether to go brighter or darker respectively.
@@ -56,6 +62,8 @@ The default steps, hues, or intensities (depending on the command), are defined 
 : 
 
     Shift the hue of colors in the theme.
+
+    ![hue](./imgs/hue.gif)
 
     Parameters  | Type    | Description
     ----------- | ------- | -----------
@@ -71,6 +79,8 @@ The default steps, hues, or intensities (depending on the command), are defined 
 
     Applies the given hue to all colors in the theme.
 
+    ![colorize](./imgs/colorize.gif)
+
     Parameters | Type    | Description
     ---------- | ------- | -----------
     `hue`      | integer | Accepts a hue value that will be applied to all colors.
@@ -84,6 +94,8 @@ The default steps, hues, or intensities (depending on the command), are defined 
 
     Command will invert all colors of the theme.
 
+    ![invert](./imgs/invert.gif)
+
     Parameters | Type   | Description
     ---------- | ------ | -----------
     `context`  | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
@@ -94,6 +106,8 @@ The default steps, hues, or intensities (depending on the command), are defined 
 `theme_tweaker_sepia`
 : 
     Applies a sepia filer to the theme colors.
+
+    ![sepia](./imgs/sepia.gif)
 
     Parameters | Type   | Description
     ---------- | ------ | -----------
@@ -106,6 +120,8 @@ The default steps, hues, or intensities (depending on the command), are defined 
 : 
    Applies a grayscale filter to the theme colors.
 
+   ![grayscale](./imgs/grayscale.gif)
+
     Parameters | Type   | Description
     ---------- | ------ | -----------
     `context`  | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
@@ -116,6 +132,8 @@ The default steps, hues, or intensities (depending on the command), are defined 
 `theme_tweaker_glow`
 : 
     Apply a glow filter to foreground colors.
+
+    ![glow](./imgs/glow.gif)
 
     Parameters  | Type   | Description
     ----------- | ------ |------------
