@@ -1,3 +1,9 @@
+# ThemeTweaker 1.4.1
+
+Oct 8, 2017
+
+- **FIX**: Fix dependencies.
+
 # ThemeTweaker 1.4.0
 
 Oct 3, 2017
