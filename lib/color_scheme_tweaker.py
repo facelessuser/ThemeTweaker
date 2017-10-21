@@ -5,9 +5,14 @@ Licensed under MIT
 Copyright (c) 2013 - 2015 Isaac Muse <isaacmuse@gmail.com>
 """
 from __future__ import absolute_import
+import sublime
 from .rgba import RGBA
 from . import x11colors
 import re
+
+NEW_SCHEMES = int(sublime.version()) >= 3150
+FONT_STYLE = "font_style" if int(sublime.version()) >= 3151 else "fontStyle"
+GLOBAL_OPTIONS = "globals" if int(sublime.version()) >= 3152 else "defaults"
 
 FILTER_MATCH = re.compile(
     r'''(?x)
@@ -18,6 +23,60 @@ FILTER_MATCH = re.compile(
     (?:@(fg|bg))?$
     '''
 )
+
+RE_SNAKE_CASE = re.compile('_(.)')
+
+
+def to_camel(m):
+    """Convert to camel case."""
+
+    return m.group(1).Upper()
+
+
+def get_tmtheme(scheme):
+    """Get old tmtheme style."""
+
+    tmtheme = {
+        "settings": [
+            {
+                "settings": {}
+            }
+        ]
+    }
+
+    for k, v in scheme.get(GLOBAL_OPTIONS, {}).items():
+        tmtheme["settings"]["settings"][RE_SNAKE_CASE.sub(to_camel, k)] = v
+
+    for k, v in scheme.items():
+        if k in ('variables', 'rules', GLOBAL_OPTIONS):
+            continue
+        tmtheme[k] = v
+
+    for rule in scheme["rules"]:
+        entry = {}
+        name = rule.get('name')
+        scope = rule.get('scope')
+        if name:
+            entry['name'] = name
+        if scope:
+            entry['scope'] = scope
+
+        entry['settings'] = {}
+
+        foreground = rule.get('foreground')
+        background = rule.get('background')
+        fontstyle = rule.get(FONT_STYLE)
+
+        if foreground:
+            entry['settings']['foreground'] = foreground
+        if background:
+            entry['settings']['background'] = background
+        if fontstyle:
+            entry['settings']['fontStyle'] = fontstyle
+
+        tmtheme['settings'].append(entry)
+
+    return tmtheme
 
 
 class ColorSchemeTweaker(object):
@@ -86,7 +145,7 @@ class ColorSchemeTweaker(object):
             rgba_bg.get_rgba() if isinstance(rgba_bg, RGBA) else rgba_bg
         )
 
-    def tweak(self, tmtheme, filters):
+    def tweak(self, scheme, filters, tmtheme=False):
         """Tweak the theme with the provided filters."""
 
         self.filters = []
@@ -99,42 +158,40 @@ class ColorSchemeTweaker(object):
                     self.filters.append([m.group(3), 0.0, m.group(4) if m.group(4) else "all"])
 
         if len(self.filters):
-            general_settings_read = False
-            for settings in tmtheme["settings"]:
-                if not general_settings_read:
-                    for k, v in settings["settings"].items():
-                        if not k.endswith('Css'):
-                            if k in ("background", "gutter", "lineHighlight", "selection"):
-                                _, value = self._filter_colors(None, self.process_color(v), global_settings=True)
-                            else:
-                                value, _ = self._filter_colors(self.process_color(v), global_settings=True)
-                            if value is None:
-                                value = v
-                        else:
-                            value = v
-                        settings["settings"][k] = value
-                    general_settings_read = True
-                    continue
-                self.bground = RGBA(
-                    self.process_color(
-                        tmtheme["settings"][0]["settings"].get("background", '#FFFFFF')
-                    )
-                ).get_rgb()
-                self.fground = RGBA(
-                    self.process_color(
-                        tmtheme["settings"][0]["settings"].get("foreground", '#000000')
-                    )
-                ).get_rgba()
+            for k, v in scheme[GLOBAL_OPTIONS].items():
+                if not k.endswith('Css'):
+                    if k in ("background", "gutter", "lineHighlight", "selection"):
+                        _, value = self._filter_colors(None, self.process_color(v), global_settings=True)
+                    else:
+                        value, _ = self._filter_colors(self.process_color(v), global_settings=True)
+                    if value is None:
+                        value = v
+                else:
+                    value = v
+                scheme[GLOBAL_OPTIONS][k] = value
+
+            self.bground = RGBA(
+                self.process_color(
+                    scheme[GLOBAL_OPTIONS].get("background", '#FFFFFF')
+                )
+            ).get_rgb()
+            self.fground = RGBA(
+                self.process_color(
+                    scheme[GLOBAL_OPTIONS].get("foreground", '#000000')
+                )
+            ).get_rgba()
+
+            for rule in scheme['rules']:
                 foreground, background = self._filter_colors(
-                    self.process_color(settings["settings"].get("foreground", None)),
-                    self.process_color(settings["settings"].get("background", None))
+                    self.process_color(rule.get("foreground", None)),
+                    self.process_color(rule.get("background", None))
                 )
                 if foreground is not None:
-                    settings["settings"]["foreground"] = foreground
+                    rule["foreground"] = foreground
                 if background is not None:
-                    settings["settings"]["background"] = background
+                    rule["background"] = background
 
-        return tmtheme
+        return scheme if not tmtheme else get_tmtheme(scheme)
 
     def process_color(self, color):
         """Process the color."""

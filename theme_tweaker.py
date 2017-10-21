@@ -6,13 +6,16 @@ Copyright (c) 2013 - 2016 Isaac Muse <isaacmuse@gmail.com>
 """
 import sublime
 import sublime_plugin
-import re
+import codecs
 from os import makedirs
-from os.path import join, basename, exists, dirname, normpath
-from plistlib import readPlistFromBytes, writePlistToBytes
-from ThemeTweaker.lib.file_strip.json import sanitize_json
-from ThemeTweaker.lib.color_scheme_tweaker import ColorSchemeTweaker
+from os.path import join, basename, exists, dirname, normpath, splitext
+from plistlib import writePlistToBytes
+from .lib.file_strip.json import sanitize_json
+from .lib.color_scheme_tweaker import ColorSchemeTweaker, get_tmtheme
+from .lib.color_scheme_matcher import ColorSchemeMatcher
 import json
+
+NEW_SCHEMES = int(sublime.version()) >= 3150
 
 PLUGIN_SETTINGS = "theme_tweaker.sublime-settings"
 TWEAK_SETTINGS = "theme_tweaker.tweak-settings"
@@ -270,7 +273,7 @@ class ThemeTweaker(object):
         Safe variant of setting theme.
 
         At one point, Sublime would be left with an empty Preference file
-        if you modified it too soon.  So manually reading ws the safest.
+        if you modified it too soon.  So manually reading was the safest.
         The problem may or may not exist now.
         """
 
@@ -345,15 +348,22 @@ class ThemeTweaker(object):
             return True
         elif not is_working and not noedit:
             self._ensure_temp()
-            content = sublime.load_binary_resource(scheme_file)
+            csm = ColorSchemeMatcher(scheme_file)
+            content = get_tmtheme(csm.get_scheme_obj()) if not NEW_SCHEMES else csm.get_scheme_obj()
             self.scheme_file = packages_path(scheme_file)
-            self.scheme_clone = packages_path(join(normpath(TEMP_PATH), basename(scheme_file)))
+            base = splitext(basename(scheme_file))[0]
+            ext = '.sublime-color-scheme' if NEW_SCHEMES else '.tmTheme'
+            self.scheme_clone = packages_path(join(normpath(TEMP_PATH), 'tweak-' + base + ext))
             try:
-                with open(self.scheme_clone, "wb") as f:
-                    f.write(content)
+                if NEW_SCHEMES:
+                    with codecs.open(self.scheme_clone, "w", encoding='utf-8') as f:
+                        f.write(sublime.encode_value(content, pretty=True))
+                else:
+                    with open(self.scheme_clone, "wb") as f:
+                        f.write(writePlistToBytes(content))
                 self.scheme_map = {
                     "original": scheme_file,
-                    "working": "%s/%s" % (TEMP_PATH, basename(scheme_file)),
+                    "working": "%s/%s" % (TEMP_PATH, 'tweak-' + base + ext),
                     "undo": "",
                     "redo": ""
                 }
@@ -386,12 +396,24 @@ class ThemeTweaker(object):
         self._setup(noedit=True)
 
         if self.theme_valid:
-            with open(self.scheme_clone, "wb") as f:
-                f.write(sublime.load_binary_resource(self.scheme_map["original"]))
-                self.scheme_map["redo"] = ""
-                self.scheme_map["undo"] = ""
-                self.p_settings["scheme_map"] = self.scheme_map
-                self._save_tweak_settings()
+            print('--clear--')
+            print(self.scheme_map['original'])
+            csm = ColorSchemeMatcher(self.scheme_map["original"])
+            content = self._get_tmtheme(csm.get_scheme_obj()) if not NEW_SCHEMES else csm.get_scheme_obj()
+            if NEW_SCHEMES:
+                with codecs.open(self.scheme_clone, "w", encoding='utf-8') as f:
+                    f.write(sublime.encode_value(content, pretty=True))
+                    self.scheme_map["redo"] = ""
+                    self.scheme_map["undo"] = ""
+                    self.p_settings["scheme_map"] = self.scheme_map
+                    self._save_tweak_settings()
+            else:
+                with open(self.scheme_clone, "wb") as f:
+                    f.write(writePlistToBytes(content))
+                    self.scheme_map["redo"] = ""
+                    self.scheme_map["undo"] = ""
+                    self.p_settings["scheme_map"] = self.scheme_map
+                    self._save_tweak_settings()
         else:
             log("Theme has not been tweaked!", status=True)
 
@@ -408,16 +430,19 @@ class ThemeTweaker(object):
         else:
             log("Theme has not been tweaked!", status=True)
 
+    def is_new_format(self, filename):
+        """Check if scheme is of the new format."""
+
+        return filename.lower().endswith('.sublime-color-scheme')
+
     def undo(self):
         """Revert last change."""
 
         self._setup(noedit=True)
 
         if self.theme_valid:
-            plist = re.sub(
-                br"^[\r\n\s]*<!--[\s\S]*?-->[\s\r\n]*|<!--[\s\S]*?-->", b'',
-                sublime.load_binary_resource(self.scheme_map["original"])
-            )
+            csm = ColorSchemeMatcher(self.scheme_map["original"])
+
             undo = self.scheme_map["undo"].split(";")
             if len(undo) == 0 or (len(undo) == 1 and undo[0] == ""):
                 log("Nothing to undo!", status=True)
@@ -426,14 +451,18 @@ class ThemeTweaker(object):
             redo.append(undo.pop())
             self.scheme_map["redo"] = ";".join(redo)
             self.scheme_map["undo"] = ";".join(undo)
-            self.plist_file = ColorSchemeTweaker().tweak(
-                readPlistFromBytes(plist),
-                self.scheme_map["undo"]
-            )
-            with open(self.scheme_clone, "wb") as f:
-                f.write(writePlistToBytes(self.plist_file))
-                self.p_settings["scheme_map"] = self.scheme_map
-                self._save_tweak_settings()
+
+            self.plist_file = ColorSchemeTweaker().tweak(csm.get_scheme_obj(), self.scheme_map["undo"], not NEW_SCHEMES)
+            if NEW_SCHEMES:
+                with codecs.open(self.scheme_clone, "w", encoding='utf-8') as f:
+                    f.write(sublime.encode_value(self.plist_file, pretty=True))
+                    self.p_settings["scheme_map"] = self.scheme_map
+                    self._save_tweak_settings()
+            else:
+                with open(self.scheme_clone, "wb") as f:
+                    f.write(writePlistToBytes(self.plist_file))
+                    self.p_settings["scheme_map"] = self.scheme_map
+                    self._save_tweak_settings()
         else:
             log("Theme has not been tweaked!", status=True)
 
@@ -443,10 +472,8 @@ class ThemeTweaker(object):
         self._setup(noedit=True)
 
         if self.theme_valid:
-            plist = re.sub(
-                br"^[\r\n\s]*<!--[\s\S]*?-->[\s\r\n]*|<!--[\s\S]*?-->", b'',
-                sublime.load_binary_resource(self.scheme_map["original"])
-            )
+            csm = ColorSchemeMatcher(self.scheme_map["original"])
+
             redo = self.scheme_map["redo"].split(";")
             if len(redo) == 0 or (len(redo) == 1 and redo[0] == ""):
                 log("Nothing to redo!", status=True)
@@ -455,14 +482,18 @@ class ThemeTweaker(object):
             undo.append(redo.pop())
             self.scheme_map["redo"] = ";".join(redo)
             self.scheme_map["undo"] = ";".join(undo)
-            self.plist_file = ColorSchemeTweaker().tweak(
-                readPlistFromBytes(plist),
-                self.scheme_map["undo"]
-            )
-            with open(self.scheme_clone, "wb") as f:
-                f.write(writePlistToBytes(self.plist_file))
-                self.p_settings["scheme_map"] = self.scheme_map
-                self._save_tweak_settings()
+
+            self.plist_file = ColorSchemeTweaker().tweak(csm.get_scheme_obj(), self.scheme_map["undo"], not NEW_SCHEMES)
+            if NEW_SCHEMES:
+                with codecs.open(self.scheme_clone, "w", encoding='utf-8') as f:
+                    f.write(sublime.encode_value(self.plist_file, pretty=True))
+                    self.p_settings["scheme_map"] = self.scheme_map
+                    self._save_tweak_settings()
+            else:
+                with open(self.scheme_clone, "wb") as f:
+                    f.write(writePlistToBytes(self.plist_file))
+                    self.p_settings["scheme_map"] = self.scheme_map
+                    self._save_tweak_settings()
         else:
             log("Theme has not been tweaked!", status=True)
 
@@ -477,23 +508,27 @@ class ThemeTweaker(object):
         self._setup()
 
         if self.theme_valid:
-            plist = re.sub(
-                br"^[\r\n\s]*<!--[\s\S]*?-->[\s\r\n]*|<!--[\s\S]*?-->", b'',
-                sublime.load_binary_resource(self.scheme_map["working"])
-            )
+            csm = ColorSchemeMatcher(self.scheme_map["working"])
+            content = csm.get_scheme_obj()
             ct = ColorSchemeTweaker()
-            self.plist_file = ct.tweak(
-                readPlistFromBytes(plist),
-                filters
-            )
+            self.plist_file = ct.tweak(content, filters, not NEW_SCHEMES)
 
-            with open(self.scheme_clone, "wb") as f:
-                f.write(writePlistToBytes(self.plist_file))
-                undo = self.scheme_map["undo"].split(";") + ct.get_filters()
-                self.scheme_map["redo"] = ""
-                self.scheme_map["undo"] = ";".join(undo)
-                self.p_settings["scheme_map"] = self.scheme_map
-                self._save_tweak_settings()
+            if NEW_SCHEMES:
+                with codecs.open(self.scheme_clone, "w", encoding='utf-8') as f:
+                    f.write(sublime.encode_value(self.plist_file, pretty=True))
+                    undo = self.scheme_map["undo"].split(";") + ct.get_filters()
+                    self.scheme_map["redo"] = ""
+                    self.scheme_map["undo"] = ";".join(undo)
+                    self.p_settings["scheme_map"] = self.scheme_map
+                    self._save_tweak_settings()
+            else:
+                with open(self.scheme_clone, "wb") as f:
+                    f.write(writePlistToBytes(self.plist_file))
+                    undo = self.scheme_map["undo"].split(";") + ct.get_filters()
+                    self.scheme_map["redo"] = ""
+                    self.scheme_map["undo"] = ";".join(undo)
+                    self.p_settings["scheme_map"] = self.scheme_map
+                    self._save_tweak_settings()
 
 
 class ThemeTweakerIsReadyCommand(sublime_plugin.ApplicationCommand):
