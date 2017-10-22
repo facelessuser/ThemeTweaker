@@ -11,7 +11,7 @@
     // Default contrast steps (+/- from 1.0) (range: 0.0 - 1.0)
     // Can be overridden in the
     // ThemeTweakerContrastCommand command's argument "step"
-    "contrast_step": 0.25,
+    "contrast_step": 0.01,
 
     // Default colorize default hue (0=Redish)
     // Can be overridden in the
@@ -31,5 +31,5 @@
     // Staturation steps (+/- from 1.0)
     // Can be overridden in the
     // ThemeTweakerSaturationCommand command's argument "step"
-    "saturation_step": 0.1
+    "saturation_step": 0.01
 }
