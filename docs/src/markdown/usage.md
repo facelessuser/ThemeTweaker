@@ -6,6 +6,8 @@ In order to use ThemeTweaker, you must set up your desired commands.  Commands c
 
 The default steps, hues, or intensities (depending on the command), are defined in the settings file.  These can be changed if desired.
 
+When tweaking a scheme, the scheme file (plus overrides in Sublime Text builds 3150+) will be consolidated and copied into `User/ThemeTweaker` with the scheme name and the prefix `tweak_`. In Sublime Text 3150+, scheme files will be of the type `.sublime-color-scheme`, while earlier builds will use the file type of `.tmTheme`.
+
 ## Filter Commands
 
 ### Brightness
@@ -255,7 +257,7 @@ Controls the default contrast step. Must be a positive value between 0.0 and 1.0
     // Default contrast steps (+/- from 1.0) (range: 0.0 - 1.0)
     // Can be overridden in the
     // ThemeTweakerContrastCommand command's argument "step"
-    "contrast_step": 0.25,
+    "contrast_step": 0.01,
 ```
 
 ### Saturation Step
@@ -266,7 +268,7 @@ Controls the default saturation step. Must be a positive value between 0.0 and 1
     // Staturation steps (+/- from 1.0) (range: 0.0 - 1.0)
     // Can be overridden in the
     // ThemeTweakerSaturationCommand command's argument "step"
-    "saturation_step": 0.1
+    "saturation_step": 0.01
 ```
 
 ### Hue Step
