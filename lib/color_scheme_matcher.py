@@ -424,8 +424,7 @@ class ColorSchemeMatcher(object):
         }
 
         fground, fground_sim = self.process_color(color_settings.get("foreground", '#000000'))
-        sbground = self.process_color(color_settings.get("selection", fground))[0]
-        sbground_sim = self.process_color(color_settings.get("selection", fground_sim))[1]
+        sbground, sbground_sim = self.process_color(color_settings.get("selection", "#0000FF"))
         sfground, sfground_sim = self.process_color(color_settings.get("selection_foreground", None))
         gbground = self.process_color(color_settings.get("gutter", bground))[0]
         gbground_sim = self.process_color(color_settings.get("gutter", bground_sim))[1]
@@ -446,6 +445,7 @@ class ColorSchemeMatcher(object):
             scope = item.get('scope', None)
             color = None
             bgcolor = None
+            scolor = None
             style = []
             if scope is not None:
                 color = item.get('foreground', None)
@@ -454,15 +454,18 @@ class ColorSchemeMatcher(object):
                 bgcolor = item.get('background', None)
                 if bgcolor is not None:
                     bgcolor = translate_color(COLOR_RE.match(bgcolor.strip()), self.variables, {})
+                scolor = item.get('selection_foreground', None)
+                if scolor is not None:
+                    scolor = translate_color(COLOR_RE.match(scolor.strip()), self.variables, {})
                 if FONT_STYLE in item:
                     for s in item.get(FONT_STYLE, '').split(' '):
                         if s == "bold" or s == "italic":  # or s == "underline":
                             style.append(s)
 
             if scope is not None:
-                self.add_entry(name, scope, color, bgcolor, style)
+                self.add_entry(name, scope, color, bgcolor, scolor, style)
 
-    def add_entry(self, name, scope, color, bgcolor, style):
+    def add_entry(self, name, scope, color, bgcolor, scolor, style):
         """Add color entry."""
 
         if color is not None:
@@ -473,6 +476,12 @@ class ColorSchemeMatcher(object):
             bg, bg_sim = self.process_color(bgcolor)
         else:
             bg, bg_sim = None, None
+        if scolor is not None:
+            sfg, sfg_sim = self.process_color(
+                scolor, bground=self.special_colors["selection"]['color_simulated']
+            )
+        else:
+            sfg, sfg_sim = None, None
         self.colors[scope] = {
             "name": name,
             "scope": scope,
@@ -480,10 +489,12 @@ class ColorSchemeMatcher(object):
             "color_simulated": fg_sim,
             "bgcolor": bg,
             "bgcolor_simulated": bg_sim,
+            "selection_color": sfg,
+            "selection_color_simulated": sfg_sim,
             "style": style
         }
 
-    def process_color(self, color, simple_strip=False):
+    def process_color(self, color, simple_strip=False, bground=None):
         """
         Strip transparency from the color value.
 
@@ -500,7 +511,8 @@ class ColorSchemeMatcher(object):
 
         rgba = RGBA(color.replace(" ", ""))
         if not simple_strip:
-            bground = self.special_colors['background']['color_simulated']
+            if bground is None:
+                bground = self.special_colors['background']['color_simulated']
             rgba.apply_alpha(bground if bground != "" else "#FFFFFF")
 
         return color, rgba.get_rgb()
@@ -545,9 +557,12 @@ class ColorSchemeMatcher(object):
         color_sim = self.special_colors['foreground']['color_simulated']
         bgcolor = self.special_colors['background']['color'] if not explicit_background else None
         bgcolor_sim = self.special_colors['background']['color_simulated'] if not explicit_background else None
+        scolor = self.special_colors['selection_foreground']['color']
+        scolor_sim = self.special_colors['selection_foreground']['color_simulated']
         style = set([])
         color_selector = SchemeSelectors("foreground", "foreground")
         bg_selector = SchemeSelectors("background", "background")
+        scolor_selector = SchemeSelectors("selection_foreground", "selection_foreground")
         style_selectors = {"bold": SchemeSelectors("", ""), "italic": SchemeSelectors("", "")}
         if scope_key in self.matched:
             color = self.matched[scope_key]["color"]
@@ -555,14 +570,18 @@ class ColorSchemeMatcher(object):
             style = self.matched[scope_key]["style"]
             bgcolor = self.matched[scope_key]["bgcolor"]
             bgcolor_sim = self.matched[scope_key]["bgcolor_simulated"]
+            scolor = self.matched[scope_key]["scolor"]
+            scolor_sim = self.matched[scope_key]["scolor_simulated"]
             selectors = self.matched[scope_key]["selectors"]
             color_selector = selectors["color"]
             bg_selector = selectors["background"]
+            scolor_selector = selectors["scolor"]
             style_selectors = selectors["style"]
         else:
             best_match_bg = 0
             best_match_fg = 0
             best_match_style = 0
+            best_match_sfg = 0
             for key in self.colors:
                 match = sublime.score_selector(scope_key, key)
                 if self.colors[key]["color"] is not None and match > best_match_fg:
@@ -570,6 +589,11 @@ class ColorSchemeMatcher(object):
                     color = self.colors[key]["color"]
                     color_sim = self.colors[key]["color_simulated"]
                     color_selector = SchemeSelectors(self.colors[key]["name"], self.colors[key]["scope"])
+                if self.colors[key]["selection_color"] is not None and match > best_match_sfg:
+                    best_match_sfg = match
+                    scolor = self.colors[key]["selection_color"]
+                    scolor_sim = self.colors[key]["selection_color_simulated"]
+                    scolor_selector = SchemeSelectors(self.colors[key]["name"], self.colors[key]["scope"])
                 if self.colors[key]["style"] is not None and match > best_match_style:
                     best_match_style = match
                     for s in self.colors[key]["style"]:
@@ -596,24 +620,28 @@ class ColorSchemeMatcher(object):
             self.matched[scope_key] = {
                 "color": color,
                 "bgcolor": bgcolor,
+                "scolor": scolor,
                 "color_simulated": color_sim,
                 "bgcolor_simulated": bgcolor_sim,
+                "scolor_simulated": scolor_sim,
                 "style": style,
                 "selectors": {
                     "color": color_selector,
                     "background": bg_selector,
+                    "scolor": scolor_selector,
                     "style": style_selectors
                 }
             }
 
         if selected:
-            if self.special_colors['selectionForeground']['color']:
-                color = self.special_colors['selectionForeground']['color']
-                color_sim = color = self.special_colors['selectionForeground']['color_simulated']
-                style = ''
+            if scolor:
+                color = scolor
+                color_sim = scolor_sim
+                color_selector = scolor_selector
             if self.special_colors['selection']['color']:
                 bgcolor = self.special_colors['selection']['color']
-                bgcolor_sim = color = self.special_colors['selection']['color_simulated']
+                bgcolor_sim = self.special_colors['selection']['color_simulated']
+                bg_selector = SchemeSelectors("selection", "selection")
 
         return SchemeColors(
             color, color_sim, bgcolor, bgcolor_sim, style,
