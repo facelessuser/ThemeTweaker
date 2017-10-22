@@ -6,6 +6,8 @@ In order to use ThemeTweaker, you must set up your desired commands.  Commands c
 
 The default steps, hues, or intensities (depending on the command), are defined in the settings file.  These can be changed if desired.
 
+When tweaking a scheme, the scheme file (plus overrides in Sublime Text builds 3150+) will be consolidated and copied into `User/ThemeTweaker` with the scheme name and the prefix `tweak_`. In Sublime Text 3150+, scheme files will be of the type `.sublime-color-scheme`, while earlier builds will use the file type of `.tmTheme`.
+
 ## Filter Commands
 
 ### Brightness
