@@ -1,3 +1,11 @@
+# ThemeTweaker 1.5.0
+
+Oct 21, 2017
+
+- **NEW**: New `.sublime-color-scheme` format support.
+- **NEW**: Tweaked files are now prefixed with `tweak_`.
+- **FIX**: Decreasing saturation and contrast factor to improve adjustment results.
+
 # ThemeTweaker 1.4.1
 
 Oct 8, 2017

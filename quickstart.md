@@ -24,6 +24,8 @@ can be enabled from the command palette.
     //////////////////////////////////
     {"keys": ["up"], "command": "theme_tweaker_brightness", "context": [{"key": "theme_tweaker"}], "args": {"direction": "+"}},
     {"keys": ["down"], "command": "theme_tweaker_brightness", "context": [{"key": "theme_tweaker"}], "args": {"direction": "-"}},
+    {"keys": ["left"], "command": "theme_tweaker_contrast", "context": [{"key": "theme_tweaker"}], "args": {"direction": "-"}},
+    {"keys": ["right"], "command": "theme_tweaker_contrast", "context": [{"key": "theme_tweaker"}], "args": {"direction": "+"}},
     {"keys": ["shift+up"], "command": "theme_tweaker_saturation", "context": [{"key": "theme_tweaker"}], "args": {"direction": "+"}},
     {"keys": ["shift+down"], "command": "theme_tweaker_saturation", "context": [{"key": "theme_tweaker"}], "args": {"direction": "-"}},
     {"keys": ["shift+left"], "command": "theme_tweaker_hue", "context": [{"key": "theme_tweaker"}], "args": {"direction": "-"}},

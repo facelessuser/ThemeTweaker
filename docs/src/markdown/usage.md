@@ -257,7 +257,7 @@ Controls the default contrast step. Must be a positive value between 0.0 and 1.0
     // Default contrast steps (+/- from 1.0) (range: 0.0 - 1.0)
     // Can be overridden in the
     // ThemeTweakerContrastCommand command's argument "step"
-    "contrast_step": 0.25,
+    "contrast_step": 0.01,
 ```
 
 ### Saturation Step
@@ -268,7 +268,7 @@ Controls the default saturation step. Must be a positive value between 0.0 and 1
     // Staturation steps (+/- from 1.0) (range: 0.0 - 1.0)
     // Can be overridden in the
     // ThemeTweakerSaturationCommand command's argument "step"
-    "saturation_step": 0.1
+    "saturation_step": 0.01
 ```
 
 ### Hue Step
