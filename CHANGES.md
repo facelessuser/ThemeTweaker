@@ -1,3 +1,9 @@
+# ThemeTweaker 1.5.1
+
+Oct 27, 2017
+
+- **FIX**: Support for irregular `.sublime-color-scheme` values.
+
 # ThemeTweaker 1.5.0
 
 Oct 21, 2017
