@@ -5,7 +5,7 @@ import textwrap
 import webbrowser
 import re
 
-__version__ = "1.5.1"
+__version__ = "1.5.2"
 __pc_name__ = 'ThemeTweaker'
 
 CSS = '''

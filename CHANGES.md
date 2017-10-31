@@ -1,3 +1,9 @@
+# ThemeTweaker 1.5.2
+
+Oct 30, 2017
+
+- **FIX**: Parse color scheme with unexpected extension correctly.
+
 # ThemeTweaker 1.5.1
 
 Oct 27, 2017
