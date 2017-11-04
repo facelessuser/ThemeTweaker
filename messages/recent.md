@@ -1,4 +1,4 @@
-# ThemeTweaker 1.4.0
+# ThemeTweaker 1.6.0
 
 New release!
 
