@@ -1,3 +1,10 @@
+# ThemeTweaker 1.6.0
+
+Nov 4, 2017
+
+- **NEW**: Add support `.sublime-color-scheme` hashed syntax highlighting.
+- **FIX**: `.sublime-color-scheme` merge logic.
+
 # ThemeTweaker 1.5.2
 
 Oct 30, 2017
