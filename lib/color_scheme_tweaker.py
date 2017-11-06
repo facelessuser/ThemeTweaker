@@ -66,9 +66,12 @@ def get_tmtheme(scheme):
         foreground = rule.get('foreground')
         background = rule.get('background')
         fontstyle = rule.get(FONT_STYLE)
+        selection_foreground = rule.get('selection_foreground')
 
         if foreground and isinstance(foreground, str):
             entry['settings']['foreground'] = foreground
+        if selection_foreground:
+            entry['selectionForeground'] = selection_foreground
         if background:
             entry['settings']['background'] = background
         if fontstyle:
