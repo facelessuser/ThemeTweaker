@@ -85,7 +85,7 @@ class Lock(object):
                     acquired = True
                     break
                 else:
-                    cls.condition.wait(timeoout - current + start)
+                    cls.condition.wait(timeout - current + start)
                     current = time.time()
         if force and not acquired:
             cls.release_lock()
