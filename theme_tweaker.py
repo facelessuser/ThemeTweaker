@@ -14,6 +14,9 @@ from .lib.file_strip.json import sanitize_json
 from .lib.color_scheme_tweaker import ColorSchemeTweaker, get_tmtheme
 from .lib.color_scheme_matcher import ColorSchemeMatcher
 import json
+import threading
+import time
+
 
 NEW_SCHEMES = int(sublime.version()) >= 3150
 
@@ -61,6 +64,44 @@ def get_setting(setting, override, default):
     if value is None:
         value = sublime.load_settings(PLUGIN_SETTINGS).get(setting, default)
     return value
+
+
+class Lock(object):
+    """Lock object."""
+
+    lock = threading.Lock()
+    condition = threading.Condition(threading.Lock())
+
+    @classmethod
+    def wait_lock(cls, timeout=0.5, force=False):
+        """Acquire lock by waiting for the current one to timeout."""
+
+        acquired = False
+        with cls.condition:
+            start = time.time()
+            current = start
+            while current < (start + timeout):
+                if cls.lock.acquire(False):
+                    acquired = True
+                    break
+                else:
+                    cls.condition.wait(0.1)
+                    current = time.time()
+        if force and not acquired:
+            cls.release_lock()
+            acquired = cls.lock.acquire(False)
+        return acquired
+
+    @classmethod
+    def release_lock(cls):
+        """Release the lock."""
+
+        try:
+            cls.lock.release()
+            with cls.condition:
+                cls.condition.notify()
+        except threading.ThreadError:
+            pass
 
 
 class ToggleThemeTweakerModeCommand(sublime_plugin.ApplicationCommand):
@@ -240,6 +281,7 @@ class ThemeTweaker(object):
 
         self.set_safe = set_safe
         self.init_theme = init_theme
+        self.set_tweaked_scheme = False
 
     def _load_tweak_settings(self):
         """Load the tweak settings."""
@@ -367,10 +409,10 @@ class ThemeTweaker(object):
                     "undo": "",
                     "redo": ""
                 }
-                if self.set_safe:
-                    self._set_theme_safely(self.scheme_map["working"])
-                else:
-                    self.settings.set(SCHEME, self.scheme_map["working"])
+                self.set_tweaked_scheme = {
+                    "set_safe": self.set_safe,
+                    "scheme": self.scheme_map["working"],
+                }
                 self.p_settings["scheme_map"] = self.scheme_map
                 self._save_tweak_settings()
                 return True
@@ -383,6 +425,7 @@ class ThemeTweaker(object):
     def _setup(self, noedit=False):
         """Setup."""
 
+        self.set_tweaked_scheme = False
         self.filters = []
         self.settings = sublime.load_settings(PREFERENCES)
         self.p_settings = self._load_tweak_settings()
@@ -390,14 +433,39 @@ class ThemeTweaker(object):
         self.scheme_map = self.p_settings.get("scheme_map", None)
         self.theme_valid = self._theme_valid(scheme_file, noedit=noedit)
 
+    def _set_tweaked_scheme(self):
+        """Set the tweaked scheme."""
+
+        if self.set_tweaked_scheme["set_safe"]:
+            self._set_theme_safely(self.set_tweaked_scheme["scheme"])
+        else:
+            self.settings.set(SCHEME, self.set_tweaked_scheme["scheme"])
+        self.set_tweaked_scheme = False
+        Lock.release_lock()
+
+    def _lock(self):
+        """
+        Acquire lock.
+
+        Attempt to acquire a lock.
+        If it fails try again and break lock if it fails.
+        """
+
+        locked = Lock.wait_lock()
+        if not locked:
+            locked = Lock.wait_lock(force=True)
+        return locked
+
     def clear(self):
         """Clear tweaks."""
+
+        if not self._lock():
+            log('Failed to acquire lock!')
+            return
 
         self._setup(noedit=True)
 
         if self.theme_valid:
-            print('--clear--')
-            print(self.scheme_map['original'])
             csm = ColorSchemeMatcher(self.scheme_map["original"])
             content = self._get_tmtheme(csm.get_scheme_obj()) if not NEW_SCHEMES else csm.get_scheme_obj()
             if NEW_SCHEMES:
@@ -414,11 +482,20 @@ class ThemeTweaker(object):
                     self.scheme_map["undo"] = ""
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
+            if self.set_tweaked_scheme:
+                sublime.set_timeout(self._set_tweaked_scheme, 100)
+            else:
+                Lock.release_lock()
         else:
+            Lock.release_lock()
             log("Theme has not been tweaked!", status=True)
 
     def clear_history(self):
         """Clear the history."""
+
+        if not self._lock():
+            log('Failed to acquire lock!')
+            return
 
         self._setup(noedit=True)
 
@@ -427,7 +504,12 @@ class ThemeTweaker(object):
             self.scheme_map["undo"] = ""
             self.p_settings["scheme_map"] = self.scheme_map
             self._save_tweak_settings()
+            if self.set_tweaked_scheme:
+                sublime.set_timeout(self._set_tweaked_scheme, 100)
+            else:
+                Lock.release_lock()
         else:
+            Lock.release_lock()
             log("Theme has not been tweaked!", status=True)
 
     def is_new_format(self, filename):
@@ -437,6 +519,10 @@ class ThemeTweaker(object):
 
     def undo(self):
         """Revert last change."""
+
+        if not self._lock():
+            log('Failed to acquire lock!')
+            return
 
         self._setup(noedit=True)
 
@@ -463,11 +549,20 @@ class ThemeTweaker(object):
                     f.write(writePlistToBytes(self.plist_file))
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
+            if self.set_tweaked_scheme:
+                sublime.set_timeout(self._set_tweaked_scheme, 100)
+            else:
+                Lock.release_lock()
         else:
+            Lock.release_lock()
             log("Theme has not been tweaked!", status=True)
 
     def redo(self):
         """Redo last reverted change."""
+
+        if not self._lock():
+            log('Failed to acquire lock!')
+            return
 
         self._setup(noedit=True)
 
@@ -494,16 +589,34 @@ class ThemeTweaker(object):
                     f.write(writePlistToBytes(self.plist_file))
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
+            if self.set_tweaked_scheme:
+                sublime.set_timeout(self._set_tweaked_scheme, 100)
+            else:
+                Lock.release_lock()
         else:
+            Lock.release_lock()
             log("Theme has not been tweaked!", status=True)
 
     def refresh(self, noedit=False):
         """Refresh."""
 
+        if not self._lock():
+            log('Failed to acquire lock!')
+            return
+
         self._setup(noedit=noedit)
+
+        if self.theme_valid and self.set_tweaked_scheme:
+            sublime.set_timeout(self._set_tweaked_scheme, 100)
+        else:
+            Lock.release_lock()
 
     def run(self, filters):
         """Run command."""
+
+        if not self._lock():
+            log('Failed to acquire lock!')
+            return
 
         self._setup()
 
@@ -529,6 +642,12 @@ class ThemeTweaker(object):
                     self.scheme_map["undo"] = ";".join(undo)
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
+            if self.set_tweaked_scheme:
+                sublime.set_timeout(self._set_tweaked_scheme, 100)
+            else:
+                Lock.release_lock()
+        else:
+            Lock.release_lock()
 
 
 class ThemeTweakerIsReadyCommand(sublime_plugin.ApplicationCommand):

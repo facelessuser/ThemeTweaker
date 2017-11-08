@@ -25,7 +25,9 @@ Algorithm has been split out into a separate library and been enhanced with a nu
 """
 from __future__ import absolute_import
 import sublime
+import codecs
 import re
+from .file_strip.json import sanitize_json
 from .rgba import RGBA, clamp, round_int
 from . import x11colors
 from os import path
@@ -108,6 +110,12 @@ COLOR_MOD_RE = re.compile(
 )
 
 RE_CAMEL_CASE = re.compile('[A-Z]')
+
+
+def packages_path(pth):
+    """Get packages path."""
+
+    return path.join(path.dirname(sublime.packages_path()), path.normpath(pth))
 
 
 def to_snake(m):
@@ -329,7 +337,7 @@ class ColorSchemeMatcher(object):
         """Initialize."""
         if color_filter is None:
             color_filter = self.filter
-        self.color_scheme = path.normpath(scheme_file)
+        self.color_scheme = scheme_file.replace('\\', '/')
         self.scheme_file = path.basename(self.color_scheme)
 
         if NEW_SCHEMES and scheme_file.endswith('.sublime-color-scheme'):
@@ -404,7 +412,8 @@ class ColorSchemeMatcher(object):
             else:
                 package_overrides.append(override)
         for override in (package_overrides + user_overrides):
-            ojson = sublime.decode_value(sublime.load_resource(override))
+            with codecs.open(packages_path(override), 'r', encoding='utf-8') as f:
+                ojson = sublime.decode_value(sanitize_json(f.read()))
 
             for k, v in ojson.get('variables', {}).items():
                 self.scheme_obj['variables'][k] = v
@@ -416,6 +425,26 @@ class ColorSchemeMatcher(object):
                 self.scheme_obj['rules'].append(item)
 
             self.overrides.append(override)
+
+        # Rare case of being given a file but sublime hasn't indexed the files and can't find it
+        if (
+            not self.overrides and
+            self.color_scheme.endswith('.sublime-color-scheme') and
+            self.color_scheme.startswith('Packages/')
+        ):
+            with codecs.open(packages_path(self.color_scheme), 'r', encoding='utf-8') as f:
+                ojson = sublime.decode_value(sanitize_json(f.read()))
+
+                for k, v in ojson.get('variables', {}).items():
+                    self.scheme_obj['variables'][k] = v
+
+                for k, v in ojson.get(GLOBAL_OPTIONS, {}).items():
+                    self.scheme_obj[GLOBAL_OPTIONS][k] = v
+
+                for item in ojson.get('rules', []):
+                    self.scheme_obj['rules'].append(item)
+
+                self.overrides.append(self.color_scheme)
 
     def filter(self, scheme):
         """Dummy filter call that does nothing."""
