@@ -348,7 +348,12 @@ class ColorSchemeMatcher(object):
                 'rules': []
             }
         else:
-            content = sublime.load_binary_resource(sublime_format_path(self.color_scheme))
+            try:
+                content = sublime.load_binary_resource(sublime_format_path(self.color_scheme))
+            except IOError:
+                # Fallback if file was created manually and not yet found in resources
+                with open(packages_path(self.color_scheme), 'rb') as f:
+                    content = f.read()
             self.legacy = True
             self.convert_format(readPlistFromBytes(XML_COMMENT_RE.sub(b'', content)))
         self.overrides = []
@@ -412,8 +417,14 @@ class ColorSchemeMatcher(object):
             else:
                 package_overrides.append(override)
         for override in (package_overrides + user_overrides):
-            with codecs.open(packages_path(override), 'r', encoding='utf-8') as f:
-                ojson = sublime.decode_value(sanitize_json(f.read()))
+            try:
+                ojson = sublime.decode_value(sublime.load_resource(override))
+            except IOError:
+                # Fallback if file was created manually and not yet found in resources
+                # Though it is unlikely this would ever get executed as `find_resources`
+                # probably wouldn't have seen it either.
+                with codecs.open(packages_path(override), 'r', encoding='utf-8') as f:
+                    ojson = sublime.decode_value(sanitize_json(f.read()))
 
             for k, v in ojson.get('variables', {}).items():
                 self.scheme_obj['variables'][k] = v
