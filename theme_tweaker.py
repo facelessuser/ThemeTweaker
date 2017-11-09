@@ -329,13 +329,14 @@ class ThemeTweaker(object):
                 pref = json.loads(content)
             except Exception:
                 pass
-        pref[SCHEME] = name
-        j = json.dumps(pref, sort_keys=True, indent=4, separators=(',', ': '))
-        try:
-            with open(pref_file, 'w') as f:
-                f.write(j + "\n")
-        except Exception:
-            pass
+        if pref[SCHEME] != name:
+            pref[SCHEME] = name
+            j = json.dumps(pref, sort_keys=True, indent=4, separators=(',', ': '))
+            try:
+                with open(pref_file, 'w') as f:
+                    f.write(j + "\n")
+            except Exception:
+                pass
 
     def _ensure_temp(self):
         """Ensure temp path exists."""
@@ -439,7 +440,8 @@ class ThemeTweaker(object):
         if self.set_tweaked_scheme["set_safe"]:
             self._set_theme_safely(self.set_tweaked_scheme["scheme"])
         else:
-            self.settings.set(SCHEME, self.set_tweaked_scheme["scheme"])
+            if self.settings.get(SCHEME) != self.set_tweaked_scheme["scheme"]:
+                self.settings.set(SCHEME, self.set_tweaked_scheme["scheme"])
         self.set_tweaked_scheme = False
         Lock.release_lock()
 
@@ -483,7 +485,7 @@ class ThemeTweaker(object):
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
             if self.set_tweaked_scheme:
-                sublime.set_timeout(self._set_tweaked_scheme, 100)
+                sublime.set_timeout(self._set_tweaked_scheme, 300)
             else:
                 Lock.release_lock()
         else:
@@ -505,7 +507,7 @@ class ThemeTweaker(object):
             self.p_settings["scheme_map"] = self.scheme_map
             self._save_tweak_settings()
             if self.set_tweaked_scheme:
-                sublime.set_timeout(self._set_tweaked_scheme, 100)
+                sublime.set_timeout(self._set_tweaked_scheme, 300)
             else:
                 Lock.release_lock()
         else:
@@ -550,7 +552,7 @@ class ThemeTweaker(object):
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
             if self.set_tweaked_scheme:
-                sublime.set_timeout(self._set_tweaked_scheme, 100)
+                sublime.set_timeout(self._set_tweaked_scheme, 300)
             else:
                 Lock.release_lock()
         else:
@@ -590,7 +592,7 @@ class ThemeTweaker(object):
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
             if self.set_tweaked_scheme:
-                sublime.set_timeout(self._set_tweaked_scheme, 100)
+                sublime.set_timeout(self._set_tweaked_scheme, 300)
             else:
                 Lock.release_lock()
         else:
@@ -607,7 +609,7 @@ class ThemeTweaker(object):
         self._setup(noedit=noedit)
 
         if self.theme_valid and self.set_tweaked_scheme:
-            sublime.set_timeout(self._set_tweaked_scheme, 100)
+            sublime.set_timeout(self._set_tweaked_scheme, 300)
         else:
             Lock.release_lock()
 
@@ -643,7 +645,7 @@ class ThemeTweaker(object):
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
             if self.set_tweaked_scheme:
-                sublime.set_timeout(self._set_tweaked_scheme, 100)
+                sublime.set_timeout(self._set_tweaked_scheme, 300)
             else:
                 Lock.release_lock()
         else:
