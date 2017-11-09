@@ -5,5 +5,27 @@
     {
         "caption": "Theme Tweaker: Toggle Tweak Mode",
         "command": "toggle_theme_tweaker_mode"
+    },
+    {
+        "caption": "ThemeTweaker: Settings",
+        "command": "edit_settings",
+        "args": {
+            "base_file": "${packages}/ThemeTweaker/theme_tweaker.sublime-settings",
+            "default": "{\n$0\n}\n"
+        }
+    },
+    {
+        "caption": "ThemeTweaker: Documentation",
+        "command": "theme_tweaker_open_site",
+        "args": {
+            "url": "http://facelessuser.github.io/ThemeTweaker/"
+        }
+    },
+    {
+        "caption": "ThemeTweaker: Quick Start Guide",
+        "command": "theme_tweaker_doc",
+        "args": {
+            "page": "${packages}/ThemeTweaker/quickstart.md"
+        }
     }
 ]

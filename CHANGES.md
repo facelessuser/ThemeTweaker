@@ -1,3 +1,13 @@
+# ThemeTweaker 1.7.0
+
+Nov 8, 2017
+
+- **NEW**: Add documentation, quick start guide, and settings command to the quick panel.
+- **NEW**: Use Sublime's dual column settings command.
+- **FIX**: Race conditions with Sublime's resource access.
+- **FIX**: Add fallback scheme reading if resource isn't indexed.
+- **FIX**: Parse `selectionForeground` properly in legacy schemes.
+
 # ThemeTweaker 1.6.0
 
 Nov 4, 2017

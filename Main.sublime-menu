@@ -13,18 +13,11 @@
                         "children":
                         [
                             {
-                                "command": "open_file", "args":
-                                {
-                                    "file": "${packages}/ThemeTweaker/theme_tweaker.sublime-settings"
+                                "command": "edit_settings", "args": {
+                                    "base_file": "${packages}/ThemeTweaker/theme_tweaker.sublime-settings",
+                                    "default": "{\n$0\n}\n"
                                 },
-                                "caption": "Settings – Default"
-                            },
-                            {
-                                "command": "open_file", "args":
-                                {
-                                    "file": "${packages}/User/theme_tweaker.sublime-settings"
-                                },
-                                "caption": "Settings – User"
+                                "caption": "Settings"
                             },
                             { "caption": "-" },
                             {
