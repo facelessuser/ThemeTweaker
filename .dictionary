@@ -27,6 +27,7 @@ markupsafe
 mkdocs
 plugin
 plugins
+popups
 pycqa
 pymdown
 pytest
