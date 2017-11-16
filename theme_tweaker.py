@@ -394,8 +394,11 @@ class ThemeTweaker(object):
             csm = ColorSchemeMatcher(scheme_file)
             content = get_tmtheme(csm.get_scheme_obj()) if not NEW_SCHEMES else csm.get_scheme_obj()
             self.scheme_file = packages_path(scheme_file)
-            base = splitext(basename(scheme_file))[0]
-            ext = '.sublime-color-scheme' if NEW_SCHEMES else '.tmTheme'
+            base, old_ext = splitext(basename(scheme_file))
+            if NEW_SCHEMES:
+                ext = '.hidden-color-scheme' if old_ext == '.hidden-color-scheme' else '.sublime-color-scheme'
+            else:
+                ext = '.tmTheme'
             self.scheme_clone = packages_path(join(normpath(TEMP_PATH), 'tweak-' + base + ext))
             try:
                 if NEW_SCHEMES:
@@ -517,7 +520,7 @@ class ThemeTweaker(object):
     def is_new_format(self, filename):
         """Check if scheme is of the new format."""
 
-        return filename.lower().endswith('.sublime-color-scheme')
+        return filename.lower().endswith(('.sublime-color-scheme', '.hidden-color-scheme'))
 
     def undo(self):
         """Revert last change."""

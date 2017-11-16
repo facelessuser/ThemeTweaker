@@ -1,3 +1,9 @@
+# ThemeTweaker 1.8.0
+
+Nov 15, 2017
+
+- **NEW**: Add support for `.hidden-color-scheme`.
+
 # ThemeTweaker 1.7.0
 
 Nov 8, 2017
