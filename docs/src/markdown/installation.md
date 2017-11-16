@@ -30,15 +30,15 @@ For those who want to install ExportHtml without package control, here are the s
 
 1. Download the latest releases of the following dependencies and unpack or git clone in the `Packages` folder as shown below:
 
-    - https://bitbucket.org/teddy_beer_maniac/sublime-text-dependency-markupsafe -> `markupsafe`
-    - https://bitbucket.org/teddy_beer_maniac/sublime-text-dependency-jinja2 -> `python-jinja2`
+    - @bitbucket:teddy_beer_maniac/sublime-text-dependency-markupsafe -> `markupsafe`
+    - @bitbucket:teddy_beer_maniac/sublime-text-dependency-jinja2 -> `python-jinja2`
     - https://github.com/packagecontrol/pygments -> `pygments`
-    - https://github.com/facelessuser/sublime-markdown-popups -> `mdpopups`
-    - https://github.com/facelessuser/sublime-markdown -> `python-markdown`
+    - @facelessuser/sublime-markdown-popups -> `mdpopups`
+    - @facelessuser/sublime-markdown -> `python-markdown`
 
 2. Download and unpack or git clone the latest ExportHtml release and unpack as `ExportHtml`:
 
-    - https://github.com/facelessuser/ThemeTweaker -> ThemeTweaker
+    - @facelessuser/ThemeTweaker -> ThemeTweaker
 
 3. Create a folder under `Packages` called `00-dependencies` and under that folder create a file called `00-dependencies.py`:
 
