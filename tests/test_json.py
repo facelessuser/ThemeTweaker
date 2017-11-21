@@ -27,7 +27,8 @@ class TestSettings(unittest.TestCase):
             '*.sublime-commands',
             '*.sublime-menu',
             '*.sublime-theme',
-            '*.sublime-color-scheme'
+            '*.sublime-color-scheme',
+            '*.hidden-color-scheme'
         )
 
         for pattern in patterns:
