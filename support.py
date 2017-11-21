@@ -212,7 +212,7 @@ class ThemeTweakerChangesCommand(sublime_plugin.WindowCommand):
                 view,
                 'changelog',
                 sublime.Region(0),
-                fmatter +text,
+                fmatter + text,
                 sublime.LAYOUT_INLINE,
                 wrapper_class="theme-tweaker",
                 css=CSS,

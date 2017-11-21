@@ -25,10 +25,13 @@ keymaps
 macOS
 markupsafe
 mkdocs
+packagecontrol
 plugin
 plugins
 popups
+popups
 pycqa
+pygments
 pymdown
 pytest
 requesters
