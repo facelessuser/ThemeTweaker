@@ -469,18 +469,24 @@ class ColorSchemeMatcher(object):
     def parse_scheme(self):
         """Parse the color scheme."""
 
-        for k, v in self.scheme_obj.get('variables', {}).items():
+        variables = self.scheme_obj.get('variables', {})
+        for k, v in variables.items():
             m = COLOR_RE.match(v.strip())
-            var = translate_color(m, self.variables, self.scheme_obj.get('variables')) if m is not None else None
-            self.variables[k] = var if var is not None else ""
+            var = translate_color(m, self.variables, self.scheme_obj.get('variables')) if m is not None else ""
+            if var is None:
+                var = ""
+            self.variables[k] = var
+            variables[k] = var
 
         color_settings = {}
-        for k, v in self.scheme_obj[GLOBAL_OPTIONS].items():
+        global_options = self.scheme_obj[GLOBAL_OPTIONS]
+        for k, v in global_options.items():
             m = COLOR_RE.match(v.strip())
             if m is not None:
                 global_color = translate_color(m, self.variables, {})
                 if global_color is not None:
                     color_settings[k] = global_color
+                    global_options[k] = global_color
 
         # Get general theme colors from color scheme file
         bground, bground_sim = self.process_color(
@@ -523,20 +529,24 @@ class ColorSchemeMatcher(object):
                     # Hashed Syntax Highlighting
                     for index, c in enumerate(color):
                         color[index] = translate_color(COLOR_RE.match(c.strip()), self.variables, {})
+                        item['foreground'][index] = color[index]
                 elif isinstance(color, str):
                     color = translate_color(COLOR_RE.match(color.strip()), self.variables, {})
+                    item['foreground'] = color
                 else:
                     color = None
                 # Background color
                 bgcolor = item.get('background', None)
                 if isinstance(bgcolor, str):
                     bgcolor = translate_color(COLOR_RE.match(bgcolor.strip()), self.variables, {})
+                    item['background'] = bgcolor
                 else:
                     bgcolor = None
                 # Selection foreground color
                 scolor = item.get('selection_foreground', None)
                 if isinstance(scolor, str):
                     scolor = translate_color(COLOR_RE.match(scolor.strip()), self.variables, {})
+                    item['selection_foreground'] = bgcolor
                 else:
                     scolor = None
                 # Font style
