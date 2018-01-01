@@ -162,20 +162,20 @@ When tweaking a scheme, the scheme file (plus overrides in Sublime Text builds 3
 
     To apply a filter to just the foreground or background, simply add `@fg` or `@bg` to the filter in question.
 
-    **Example:**
+    !!! example
 
-    ```javascript
-    {
-        "keys": ["up"],
-        "command": "theme_tweaker_custom",
-        "context": [
-            {"key": "theme_tweaker"}
-        ],
-        "args": {
-            "filters": "grayscale@fg;sepia;colorize(0);hue(-30);brightness(1.050000)@bg;saturation(0.900000);brightness(0.950000)"
-        }
-    },
-    ```
+        ```javascript
+        {
+            "keys": ["up"],
+            "command": "theme_tweaker_custom",
+            "context": [
+                {"key": "theme_tweaker"}
+            ],
+            "args": {
+                "filters": "grayscale@fg;sepia;colorize(0);hue(-30);brightness(1.050000)@bg;saturation(0.900000);brightness(0.950000)"
+            }
+        },
+        ```
 
 ## Special Commands
 
