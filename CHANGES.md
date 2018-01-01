@@ -1,3 +1,9 @@
+# ThemeTweaker 1.8.1
+
+Jan 1, 2018
+
+- **FIX**: Color matcher should update original scheme object with color translations, and should apply filter **after** initial parsing.
+
 # ThemeTweaker 1.8.0
 
 Nov 20, 2017
