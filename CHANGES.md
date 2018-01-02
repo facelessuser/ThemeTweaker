@@ -1,3 +1,9 @@
+# ThemeTweaker 1.8.2
+
+Jan 1, 2018
+
+- **FIX**: Scheme variables should allow `-`.
+
 # ThemeTweaker 1.8.1
 
 Jan 1, 2018
