@@ -67,7 +67,7 @@ HSL_COLORS = r"""(?x)
 """ % COLOR_PARTS
 
 VARIABLES = r"""(?x)
-    \b(?P<var>var\(\s*(?P<var_content>\w[\w\d]*)\s*\))
+    \b(?P<var>var\(\s*(?P<var_content>[-\w][-\w\d]*)\s*\))
 """
 
 COLOR_MOD = r"""(?x)
