@@ -19,6 +19,7 @@ import time
 
 
 NEW_SCHEMES = int(sublime.version()) >= 3150
+AUTO = int(sublime.version()) >= 4095
 
 PLUGIN_SETTINGS = "theme_tweaker.sublime-settings"
 TWEAK_SETTINGS = "theme_tweaker.tweak-settings"
@@ -73,7 +74,7 @@ class Lock(object):
     condition = threading.Condition(threading.Lock())
 
     @classmethod
-    def wait_lock(cls, timeout=0.5, force=False):
+    def wait_lock(cls, timeout=2, force=False):
         """Acquire lock by waiting for the current one to timeout."""
 
         acquired = False
@@ -434,6 +435,9 @@ class ThemeTweaker(object):
         self.settings = sublime.load_settings(PREFERENCES)
         self.p_settings = self._load_tweak_settings()
         scheme_file = self.settings.get(SCHEME, None) if self.init_theme is None else self.init_theme
+        if AUTO and scheme_file == "auto":
+            info = sublime.ui_info()
+            scheme_file = info['color_scheme']['resolved_value']
         self.scheme_map = self.p_settings.get("scheme_map", None)
         self.theme_valid = self._theme_valid(scheme_file, noedit=noedit)
 

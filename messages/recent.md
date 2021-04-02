@@ -1,4 +1,4 @@
-# ThemeTweaker 1.8.0
+# ThemeTweaker 1.9.0
 
 New release!
 

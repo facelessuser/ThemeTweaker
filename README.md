@@ -7,7 +7,12 @@ Change your Sublime tmTheme files by applying different color filters on the fly
 
 ![hue](docs/src/markdown/imgs/hue.gif)
 
-ThemeTweaker came out as a side project while I was working on ExportHtml.  I was dealing with replicating the tmTheme in an HTML output, but later wanted to be able to modify the tmTheme with filters such as: rotating the hue, adjusting the contrast, increasing/deceasing the brightness, etc.  Some of the filters are useless, but they were fun to throw together.  I have been using it for a while, but recently decided to throw it together in its own package.  It can be used as a stand alone plugin for tweaking your themes, or it can be leveraged by other plugins for modifying color scheme (tmTheme) files.
+ThemeTweaker came out as a side project while I was working on ExportHtml.  I was dealing with replicating the tmTheme
+in an HTML output, but later wanted to be able to modify the tmTheme with filters such as: rotating the hue, adjusting
+the contrast, increasing/deceasing the brightness, etc.  Some of the filters are useless, but they were fun to throw
+together.  I have been using it for a while, but recently decided to throw it together in its own package.  It can be
+used as a stand alone plugin for tweaking your themes, or it can be leveraged by other plugins for modifying color
+scheme (tmTheme) files.
 
 ## Features
 
@@ -36,7 +41,7 @@ http://facelessuser.github.io/ThemeTweaker/
 
 The MIT License (MIT)
 
-Copyright (c) 2013 - 2017 Isaac Muse
+Copyright (c) 2013 - 2021 Isaac Muse
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

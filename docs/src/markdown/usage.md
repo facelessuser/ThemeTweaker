@@ -2,11 +2,15 @@
 
 ## Overview
 
-In order to use ThemeTweaker, you must set up your desired commands.  Commands can be for the command palette, keymaps, menu etc.  ThemeTweaker comes with an example keymap file to show how commands are constructed.
+In order to use ThemeTweaker, you must set up your desired commands.  Commands can be for the command palette, keymaps,
+menu etc.  ThemeTweaker comes with an example keymap file to show how commands are constructed.
 
-The default steps, hues, or intensities (depending on the command), are defined in the settings file.  These can be changed if desired.
+The default steps, hues, or intensities (depending on the command), are defined in the settings file.  These can be
+changed if desired.
 
-When tweaking a scheme, the scheme file (plus overrides in Sublime Text builds 3150+) will be consolidated and copied into `User/ThemeTweaker` with the scheme name and the prefix `tweak_`. In Sublime Text 3150+, scheme files will be of the type `.sublime-color-scheme`, while earlier builds will use the file type of `.tmTheme`.
+When tweaking a scheme, the scheme file (plus overrides in Sublime Text builds 3150+) will be consolidated and copied
+into `User/ThemeTweaker` with the scheme name and the prefix `tweak_`. In Sublime Text 3150+, scheme files will be of
+the type `.sublime-color-scheme`, while earlier builds will use the file type of `.tmTheme`.
 
 ## Filter Commands
 
@@ -146,7 +150,9 @@ When tweaking a scheme, the scheme file (plus overrides in Sublime Text builds 3
 
 `theme_tweaker_custom`
 : 
-    A command that allows multiple filters to be chained together.  It takes a string with special syntax to apply filters.  All filters that are available under [Filter Commands](#filter-commands) are configurable.  All operations are defined by a single string.
+    A command that allows multiple filters to be chained together.  It takes a string with special syntax to apply
+    filters.  All filters that are available under [Filter Commands](#filter-commands) are configurable.  All operations
+    are defined by a single string.
 
     **Available Filters:**
 
@@ -203,11 +209,13 @@ This command is available in the command palette as `Theme Tweaker: Toggle Tweak
 
 `toggle_theme_tweaker_mode`
 : 
-    Toggles the internal `theme_tweaker` mode flag that can be used as a context for when tweak commands are active.  See [Constructing Commands](#constructing-commands) for more info.
+    Toggles the internal `theme_tweaker` mode flag that can be used as a context for when tweak commands are active. See
+    [Constructing Commands](#constructing-commands) for more info.
 
 ## Constructing Commands
 
-Whether a keymap, command palette, or menu command is desired, the two theme tweaker related required arguments are `command` which is the name of the commands and `args` which is a dictionary of the parameters.
+Whether a keymap, command palette, or menu command is desired, the two theme tweaker related required arguments are
+`command` which is the name of the commands and `args` which is a dictionary of the parameters.
 
 ```javascript
 {
@@ -219,7 +227,8 @@ Whether a keymap, command palette, or menu command is desired, the two theme twe
 },
 ```
 
-Theme tweaker can check for the `theme_tweaker` context to control whether a command is active or not.  The `theme_tweaker` context is toggled with the [Toggle Theme Tweaker Mode](#toggle-theme-tweaker-mode) command.
+Theme tweaker can check for the `theme_tweaker` context to control whether a command is active or not.  The
+`theme_tweaker` context is toggled with the [Toggle Theme Tweaker Mode](#toggle-theme-tweaker-mode) command.
 
 ```javascript
 {

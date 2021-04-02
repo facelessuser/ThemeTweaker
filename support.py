@@ -5,7 +5,7 @@ import textwrap
 import webbrowser
 import re
 
-__version__ = "1.8.2"
+__version__ = "1.8.3"
 __pc_name__ = 'ThemeTweaker'
 
 CSS = '''
@@ -35,7 +35,7 @@ frontmatter = {
                 "repo": "ThemeTweaker"
             }
         },
-        "pymdownx.extrarawhtml",
+        "markdown.extensions.md_in_html",
         "pymdownx.keys",
         {"pymdownx.escapeall": {"hardbreak": True, "nbsp": True}},
         # Sublime doesn't support superscript, so no ordinal numbers
@@ -156,9 +156,8 @@ class ThemeTweakerDocCommand(sublime_plugin.WindowCommand):
 
         try:
             import mdpopups
-            import pymdownx
             has_phantom_support = (mdpopups.version() >= (1, 10, 0)) and (int(sublime.version()) >= 3124)
-            fmatter = mdpopups.format_frontmatter(frontmatter) if pymdownx.version_info[:3] >= (4, 3, 0) else ''
+            fmatter = mdpopups.format_frontmatter(frontmatter)
         except Exception:
             fmatter = ''
             has_phantom_support = False
@@ -195,9 +194,8 @@ class ThemeTweakerChangesCommand(sublime_plugin.WindowCommand):
         """Show the changelog in a new view."""
         try:
             import mdpopups
-            import pymdownx
             has_phantom_support = (mdpopups.version() >= (1, 10, 0)) and (int(sublime.version()) >= 3124)
-            fmatter = mdpopups.format_frontmatter(frontmatter) if pymdownx.version_info[:3] >= (4, 3, 0) else ''
+            fmatter = mdpopups.format_frontmatter(frontmatter)
         except Exception:
             fmatter = ''
             has_phantom_support = False
