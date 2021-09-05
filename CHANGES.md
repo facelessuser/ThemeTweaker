@@ -1,5 +1,9 @@
 # ThemeTweaker
 
+## 1.9.1
+
+- **FIX**: Support for Package Control 4.0 (compatibility with latest `mdpopups`).
+
 ## 1.9.0
 
 - **NEW**: Add support for Sublime 4095 `auto` color scheme option.
