@@ -11,7 +11,7 @@
 ## 1.9.0
 
 - **NEW**: Add support for Sublime 4095 `auto` color scheme option.
-- **FIX**: Don't use old lecacy RGB library, instead use `coloraide` library in `mdpopups`. Handles colors better.
+- **FIX**: Don't use old legacy RGB library, instead use `coloraide` library in `mdpopups`. Handles colors better.
 
 ## 1.8.2
 
