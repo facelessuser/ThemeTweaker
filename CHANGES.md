@@ -1,5 +1,9 @@
 # ThemeTweaker
 
+## 1.9.2
+
+- **FIX**: Remove unnecessary dependencies.
+
 ## 1.9.1
 
 - **FIX**: Support for Package Control 4.0 (compatibility with latest `mdpopups`).
