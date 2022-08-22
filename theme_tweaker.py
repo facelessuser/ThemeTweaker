@@ -202,6 +202,42 @@ class ThemeTweakerSepiaCommand(sublime_plugin.ApplicationCommand):
             ThemeTweaker(theme).run("sepia")
 
 
+class ThemeTweakerProtanCommand(sublime_plugin.ApplicationCommand):
+    """Apply `protan` filter."""
+
+    def run(self, context=None, theme=None):
+        """Run command."""
+
+        if context is not None and context in ["fg", "bg"]:
+            ThemeTweaker(theme).run("protan@%s" % context)
+        else:
+            ThemeTweaker(theme).run("protan")
+
+
+class ThemeTweakerDeutanCommand(sublime_plugin.ApplicationCommand):
+    """Apply `deutan` filter."""
+
+    def run(self, context=None, theme=None):
+        """Run command."""
+
+        if context is not None and context in ["fg", "bg"]:
+            ThemeTweaker(theme).run("deutan@%s" % context)
+        else:
+            ThemeTweaker(theme).run("deutan")
+
+
+class ThemeTweakerTritanCommand(sublime_plugin.ApplicationCommand):
+    """Apply `tritan` filter."""
+
+    def run(self, context=None, theme=None):
+        """Run command."""
+
+        if context is not None and context in ["fg", "bg"]:
+            ThemeTweaker(theme).run("tritan@%s" % context)
+        else:
+            ThemeTweaker(theme).run("tritan")
+
+
 class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
     """Colorize the theme with the given hue."""
 
