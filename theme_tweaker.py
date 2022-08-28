@@ -202,6 +202,42 @@ class ThemeTweakerSepiaCommand(sublime_plugin.ApplicationCommand):
             ThemeTweaker(theme).run("sepia")
 
 
+class ThemeTweakerProtanCommand(sublime_plugin.ApplicationCommand):
+    """Apply `protan` filter."""
+
+    def run(self, context=None, theme=None):
+        """Run command."""
+
+        if context is not None and context in ["fg", "bg"]:
+            ThemeTweaker(theme).run("protan@%s" % context)
+        else:
+            ThemeTweaker(theme).run("protan")
+
+
+class ThemeTweakerDeutanCommand(sublime_plugin.ApplicationCommand):
+    """Apply `deutan` filter."""
+
+    def run(self, context=None, theme=None):
+        """Run command."""
+
+        if context is not None and context in ["fg", "bg"]:
+            ThemeTweaker(theme).run("deutan@%s" % context)
+        else:
+            ThemeTweaker(theme).run("deutan")
+
+
+class ThemeTweakerTritanCommand(sublime_plugin.ApplicationCommand):
+    """Apply `tritan` filter."""
+
+    def run(self, context=None, theme=None):
+        """Run command."""
+
+        if context is not None and context in ["fg", "bg"]:
+            ThemeTweaker(theme).run("tritan@%s" % context)
+        else:
+            ThemeTweaker(theme).run("tritan")
+
+
 class ThemeTweakerColorizeCommand(sublime_plugin.ApplicationCommand):
     """Colorize the theme with the given hue."""
 
@@ -353,8 +389,9 @@ class ThemeTweaker(object):
         if exists(packages_path(pth)):
             found = True
         else:
+            base = basename(pth)
             try:
-                results = sublime.find_resources(basename(pth))
+                results = sublime.find_resources(base)
                 if sublime.platform() == "windows":
                     for r in results:
                         if r.lower() == pth.lower():
@@ -362,6 +399,8 @@ class ThemeTweaker(object):
                             break
                 else:
                     found = pth in results
+                if not found and results and pth == base and basename(results[0]) == base:
+                    found = True
             except Exception:
                 pass
         return found

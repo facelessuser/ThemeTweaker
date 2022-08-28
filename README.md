@@ -43,7 +43,7 @@ http://facelessuser.github.io/ThemeTweaker/
 
 The MIT License (MIT)
 
-Copyright (c) 2013 - 2021 Isaac Muse
+Copyright (c) 2013 - 2022 Isaac Muse
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

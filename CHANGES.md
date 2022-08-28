@@ -1,8 +1,11 @@
 # ThemeTweaker
 
-## 1.9.2
+## 1.10.0
 
+- **NEW**: Support latest `coloraide`.
+- **NEW**: Add new colorblind filters.
 - **FIX**: Remove unnecessary dependencies.
+- **FIX**: Fix issue related to identifying if the current theme is a tweaked theme or not.
 
 ## 1.9.1
 
