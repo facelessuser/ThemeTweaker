@@ -1,5 +1,9 @@
 # ThemeTweaker
 
+## 1.9.3
+
+- **FIX**: Fix regression that broke theme handling.
+
 ## 1.9.2
 
 - **FIX**: Remove unnecessary dependencies.
