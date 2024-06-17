@@ -43,7 +43,7 @@ http://facelessuser.github.io/ThemeTweaker/
 
 The MIT License (MIT)
 
-Copyright (c) 2013 - 2021 Isaac Muse
+Copyright (c) 2013 - 2024 Isaac Muse
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -64,8 +64,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 [github-ci-image]: https://github.com/facelessuser/ThemeTweaker/workflows/build/badge.svg?branch=master&event=push
 [github-ci-link]: https://github.com/facelessuser/ThemeTweaker/actions?query=workflow%3Abuild+branch%3Amaster
-[discord-image]: https://img.shields.io/discord/678289859768745989?logo=discord&logoColor=aaaaaa&color=mediumpurple&labelColor=333333
-[discord-link]: https://discord.gg/TWs8Tgr
 [pc-image]: https://img.shields.io/packagecontrol/dt/ThemeTweaker.svg?labelColor=333333&logo=sublime%20text
 [pc-link]: https://packagecontrol.io/packages/ThemeTweaker
 [license-image]: https://img.shields.io/badge/license-MIT-blue.svg?labelColor=333333

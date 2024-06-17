@@ -16,10 +16,10 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
 
 ### Brightness
 
+/// define
 `theme_tweaker_brightness`
-: 
 
-    Adjust the brightness of theme.
+-   Adjust the brightness of theme.
 
     ![brightness](./imgs/brightness.gif)
 
@@ -29,13 +29,14 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
     `step`      | float  | Controls the brightness magnitude for each step. It is in relation to the center `1.0`.  So a value of `0.01` would shift it `1.01`.
     `context`   | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`     | string | Theme to adjust.  If none, it will use the current set theme.
+///
 
 ### Contrast
 
+/// define
 `theme_tweaker_contrast`
-: 
 
-    Adjust the contrast of theme.
+-   Adjust the contrast of theme.
 
     ![contrast](./imgs/contrast.gif)
 
@@ -45,13 +46,14 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
     `step`      | float  | Controls the contrast magnitude for each step. It is in relation to the center `1.0`.  So a value of `0.01` would shift it `1.01`.
     `context`   | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`     | string | Theme to adjust.  If none, it will use the current set theme.
+///
 
 ### Saturation
 
+/// define
 `theme_tweaker_saturation`
-: 
 
-    Adjust the brightness of theme.
+-   Adjust the brightness of theme.
 
     ![saturation](./imgs/saturation.gif)
 
@@ -61,13 +63,14 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
     `step`      | float  | Controls the brightness magnitude for each step. It is in relation to the center `1.0`.  So a value of `0.01` would shift it `1.01`.
     `context`   | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`     | string | Theme to adjust.  If none, it will use the current set theme.
+///
 
 ### Hue
 
+/// define
 `theme_tweaker_hue`
-: 
 
-    Shift the hue of colors in the theme.
+-   Shift the hue of colors in the theme.
 
     ![hue](./imgs/hue.gif)
 
@@ -77,13 +80,14 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
     `step`      | integer | Accepts an integer which represents a degree between `0` and `360` to shift the hue.
     `context`   | string  | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`     | string  | Theme to adjust.  If none, it will use the current set theme.
+///
 
 ### Colorize
 
+/// define
 `theme_tweaker_colorize`
-: 
 
-    Applies the given hue to all colors in the theme.
+-   Applies the given hue to all colors in the theme.
 
     ![colorize](./imgs/colorize.gif)
 
@@ -92,13 +96,14 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
     `hue`      | integer | Accepts a hue value that will be applied to all colors.
     `context`  | string  | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`    | string  | Theme to adjust.  If none, it will use the current set theme.
+///
 
 ### Invert
 
+/// define
 `theme_tweaker_invert`
-: 
 
-    Command will invert all colors of the theme.
+-   Command will invert all colors of the theme.
 
     ![invert](./imgs/invert.gif)
 
@@ -106,12 +111,14 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
     ---------- | ------ | -----------
     `context`  | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`    | string | Theme to adjust.  If none, it will use the current set theme.
+///
 
 ### Sepia
 
+/// define
 `theme_tweaker_sepia`
-: 
-    Applies a sepia filer to the theme colors.
+
+-   Applies a sepia filer to the theme colors.
 
     ![sepia](./imgs/sepia.gif)
 
@@ -119,25 +126,29 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
     ---------- | ------ | -----------
     `context`  | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`    | string | Theme to adjust.  If none, it will use the current set theme.
+///
 
 ### Grayscale
 
+/// define
 `theme_tweaker_grayscale`
-: 
-   Applies a grayscale filter to the theme colors.
 
-   ![grayscale](./imgs/grayscale.gif)
+-   Applies a grayscale filter to the theme colors.
+
+    ![grayscale](./imgs/grayscale.gif)
 
     Parameters | Type   | Description
     ---------- | ------ | -----------
     `context`  | string | You can limit the filter to the background or foreground by setting the argument to either `bg` or `fg` respectively.
     `theme`    | string | Theme to adjust.  If none, it will use the current set theme.
+///
 
 ### Glow
 
+/// define
 `theme_tweaker_glow`
-: 
-    Apply a glow filter to foreground colors.
+
+-   Apply a glow filter to foreground colors.
 
     ![glow](./imgs/glow.gif)
 
@@ -145,72 +156,83 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
     ----------- | ------ |------------
     `intensity` | float  | Accepts a floating point glow intensity to determine the strength of the glow.  Glow should be between `0.0` and `1.0`.
     `theme`     | string | Theme to adjust.  If none, it will use the current set theme.
+///
 
 ### Custom Filter
 
+//// define
 `theme_tweaker_custom`
-: 
-    A command that allows multiple filters to be chained together.  It takes a string with special syntax to apply
+
+-   A command that allows multiple filters to be chained together.  It takes a string with special syntax to apply
     filters.  All filters that are available under [Filter Commands](#filter-commands) are configurable.  All operations
     are defined by a single string.
 
     **Available Filters:**
 
-    - grayscale
-    - sepia
-    - invert
-    - brightness(float)
-    - saturation(float)
-    - contrast(float)
-    - hue(signed integer)
-    - colorize(integer)
-    - glow(positive float)
+    -   grayscale
+    -   sepia
+    -   invert
+    -   brightness(float)
+    -   saturation(float)
+    -   contrast(float)
+    -   hue(signed integer)
+    -   colorize(integer)
+    -   glow(positive float)
 
     To apply a filter to just the foreground or background, simply add `@fg` or `@bg` to the filter in question.
 
-    !!! example
-
-        ```javascript
-        {
-            "keys": ["up"],
-            "command": "theme_tweaker_custom",
-            "context": [
-                {"key": "theme_tweaker"}
-            ],
-            "args": {
-                "filters": "grayscale@fg;sepia;colorize(0);hue(-30);brightness(1.050000)@bg;saturation(0.900000);brightness(0.950000)"
-            }
-        },
-        ```
+    /// example
+    ```javascript
+    {
+        "keys": ["up"],
+        "command": "theme_tweaker_custom",
+        "context": [
+            {"key": "theme_tweaker"}
+        ],
+        "args": {
+            "filters": "grayscale@fg;sepia;colorize(0);hue(-30);brightness(1.050000)@bg;saturation(0.900000);brightness(0.950000)"
+        }
+    },
+    ```
+    ///
+////
 
 ## Special Commands
 
 ### Undo
 
+/// define
 `theme_tweaker_undo`
-: 
-    Undo last applied filter.
+
+-   Undo last applied filter.
+///
 
 ### Redo
 
+/// define
 `theme_tweaker_redo`
-: 
-    Re-apply last reverted filter.
+
+-   Re-apply last reverted filter.
+///
 
 ### Clear
 
+/// define
 `theme_tweaker_clear`
-: 
-    Clears all applied filters.
+
+-   Clears all applied filters.
+///
 
 ### Toggle Theme Tweaker Mode
 
 This command is available in the command palette as `Theme Tweaker: Toggle Tweak Mode`.
 
+/// define
 `toggle_theme_tweaker_mode`
-: 
-    Toggles the internal `theme_tweaker` mode flag that can be used as a context for when tweak commands are active. See
+
+-   Toggles the internal `theme_tweaker` mode flag that can be used as a context for when tweak commands are active. See
     [Constructing Commands](#constructing-commands) for more info.
+///
 
 ## Constructing Commands
 

@@ -353,8 +353,9 @@ class ThemeTweaker(object):
         if exists(packages_path(pth)):
             found = True
         else:
+            base = basename(pth)
             try:
-                results = sublime.find_resources(basename(pth))
+                results = sublime.find_resources(base)
                 if sublime.platform() == "windows":
                     for r in results:
                         if r.lower() == pth.lower():
@@ -362,6 +363,8 @@ class ThemeTweaker(object):
                             break
                 else:
                     found = pth in results
+                if not found and results and pth == base and basename(results[0]) == base:
+                    found = True
             except Exception:
                 pass
         return found
