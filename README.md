@@ -1,6 +1,4 @@
 [![Donate via PayPal][donate-image]][donate-link]
-[![Discord][discord-image]][discord-link]
-[![Build][github-ci-image]][github-ci-link]
 [![Package Control Downloads][pc-image]][pc-link]
 ![License][license-image]
 # ThemeTweaker
@@ -43,8 +41,6 @@ http://facelessuser.github.io/ThemeTweaker/
 
 The MIT License (MIT)
 
-[github-ci-image]: https://github.com/facelessuser/ThemeTweaker/workflows/build/badge.svg?branch=master&event=push
-[github-ci-link]: https://github.com/facelessuser/ThemeTweaker/actions?query=workflow%3Abuild+branch%3Amaster
 [pc-image]: https://img.shields.io/packagecontrol/dt/ThemeTweaker.svg?labelColor=333333&logo=sublime%20text
 [pc-link]: https://packagecontrol.io/packages/ThemeTweaker
 [license-image]: https://img.shields.io/badge/license-MIT-blue.svg?labelColor=333333
