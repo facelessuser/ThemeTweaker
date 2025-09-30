@@ -1,5 +1,9 @@
 # ThemeTweaker
 
+## 1.10.1
+
+-   **FIX**: Require typing dependency for Python 3.3.
+
 ## 1.10.0
 
 - **NEW**: Support latest `coloraide`.
