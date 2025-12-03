@@ -1,4 +1,4 @@
-# ThemeTweaker 1.10.0
+# ThemeTweaker
 
 New release!
 
@@ -7,9 +7,6 @@ the release.
 
 A restart of Sublime Text is most likely required.
 
-## 1.10.0
+## 1.11.0
 
-- **NEW**: Support latest `coloraide`.
-- **NEW**: Add new colorblind filters.
-- **FIX**: Remove unnecessary dependencies.
-- **FIX**: Fix issue related to identifying if the current theme is a tweaked theme or not.
+-   **NEW**: Changes for Python 3.13 for ST 4201+.

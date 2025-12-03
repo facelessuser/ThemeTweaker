@@ -7,9 +7,9 @@ Copyright (c) 2013 - 2016 Isaac Muse <isaacmuse@gmail.com>
 import sublime
 import sublime_plugin
 import codecs
+import plistlib
 from os import makedirs
 from os.path import join, basename, exists, dirname, normpath, splitext
-from plistlib import writePlistToBytes
 from .lib.file_strip.json import sanitize_json
 from .lib.color_scheme_tweaker import ColorSchemeTweaker, get_tmtheme
 from .lib.color_scheme_matcher import ColorSchemeMatcher
@@ -446,7 +446,7 @@ class ThemeTweaker(object):
                         f.write(sublime.encode_value(content, pretty=True))
                 else:
                     with open(self.scheme_clone, "wb") as f:
-                        f.write(writePlistToBytes(content))
+                        f.write(plistlib.dumps(content))
                 self.scheme_map = {
                     "original": scheme_file,
                     "working": "%s/%s" % (TEMP_PATH, 'tweak-' + base + ext),
@@ -525,7 +525,7 @@ class ThemeTweaker(object):
                     self._save_tweak_settings()
             else:
                 with open(self.scheme_clone, "wb") as f:
-                    f.write(writePlistToBytes(content))
+                    f.write(plistlib.dumps(content))
                     self.scheme_map["redo"] = ""
                     self.scheme_map["undo"] = ""
                     self.p_settings["scheme_map"] = self.scheme_map
@@ -594,7 +594,7 @@ class ThemeTweaker(object):
                     self._save_tweak_settings()
             else:
                 with open(self.scheme_clone, "wb") as f:
-                    f.write(writePlistToBytes(self.plist_file))
+                    f.write(plistlib.dumps(self.plist_file))
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
             if self.set_tweaked_scheme:
@@ -634,7 +634,7 @@ class ThemeTweaker(object):
                     self._save_tweak_settings()
             else:
                 with open(self.scheme_clone, "wb") as f:
-                    f.write(writePlistToBytes(self.plist_file))
+                    f.write(plistlib.dumps(self.plist_file))
                     self.p_settings["scheme_map"] = self.scheme_map
                     self._save_tweak_settings()
             if self.set_tweaked_scheme:
@@ -684,7 +684,7 @@ class ThemeTweaker(object):
                     self._save_tweak_settings()
             else:
                 with open(self.scheme_clone, "wb") as f:
-                    f.write(writePlistToBytes(self.plist_file))
+                    f.write(plistlib.dumps(self.plist_file))
                     undo = self.scheme_map["undo"].split(";") + ct.get_filters()
                     self.scheme_map["redo"] = ""
                     self.scheme_map["undo"] = ";".join(undo)

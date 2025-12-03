@@ -1,15 +1,19 @@
 # ThemeTweaker
 
+## 1.11.0
+
+-   **NEW**: Changes for Python 3.13 for ST 4201+.
+
 ## 1.10.1
 
 -   **FIX**: Require typing dependency for Python 3.3.
 
 ## 1.10.0
 
-- **NEW**: Support latest `coloraide`.
-- **NEW**: Add new colorblind filters.
-- **FIX**: Remove unnecessary dependencies.
-- **FIX**: Fix issue related to identifying if the current theme is a tweaked theme or not.
+-   **NEW**: Support latest `coloraide`.
+-   **NEW**: Add new colorblind filters.
+-   **FIX**: Remove unnecessary dependencies.
+-   **FIX**: Fix issue related to identifying if the current theme is a tweaked theme or not.
 
 ## 1.9.3
 
