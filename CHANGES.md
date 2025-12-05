@@ -1,5 +1,9 @@
 # ThemeTweaker
 
+## 1.11.1
+
+-   **FIX**: Don't rely on patterns from older color library.
+
 ## 1.11.0
 
 -   **NEW**: Changes for Python 3.13 for ST 4201+.
