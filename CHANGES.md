@@ -1,5 +1,9 @@
 # ThemeTweaker
 
+## 1.11.2
+
+-   **FIX**: Fix issues with related to recent changes in ColorAide vendored by mdpopups.
+
 ## 1.11.1
 
 -   **FIX**: Don't rely on patterns from older color library.
