@@ -181,20 +181,20 @@ the type `.sublime-color-scheme`, while earlier builds will use the file type of
 
     To apply a filter to just the foreground or background, simply add `@fg` or `@bg` to the filter in question.
 
-    /// example
-    ```javascript
-    {
-        "keys": ["up"],
-        "command": "theme_tweaker_custom",
-        "context": [
-            {"key": "theme_tweaker"}
-        ],
-        "args": {
-            "filters": "grayscale@fg;sepia;colorize(0);hue(-30);brightness(1.050000)@bg;saturation(0.900000);brightness(0.950000)"
-        }
-    },
-    ```
-    ///
+    > [!example]
+    > ```javascript
+    > {
+    >     "keys": ["up"],
+    >     "command": "theme_tweaker_custom",
+    >     "context": [
+    >         {"key": "theme_tweaker"}
+    >     ],
+    >     "args": {
+    >         "filters": "grayscale@fg;sepia;colorize(0);hue(-30);brightness(1.050000)@bg;saturation(0.900000);brightness(0.950000)"
+    >     }
+    > },
+    > ```
+
 ////
 
 ## Special Commands
